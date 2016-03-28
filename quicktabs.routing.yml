@@ -1,0 +1,56 @@
+quicktabs.admin:
+  path: '/admin/structure/quicktabs'
+  defaults:
+    _title: 'Quicktabs'
+    _controller: '\Drupal\quicktabs\Controller\QuickTabsController::content'
+  requirements:
+    _permission: 'administer quicktabs'
+  options:
+    _admin_route: TRUE
+quicktabs.list_tabs:
+  path: '/admin/structure/quicktabs/list'
+  defaults:
+    _title: 'List Quicktabs'
+    _entity_list: 'settings'
+  requirements:
+    _permission: 'administer quicktabs'
+entity.settings.add:
+  path: '/admin/structure/quicktabs/add'
+  defaults:
+    _title: 'Add Quicktabs Instance'
+    _entity_form: settings.add
+  requirements:
+    _permission: 'administer quicktabs'
+entity.settings.delete:
+ path: '/admin/structure/quicktabs/manage/{settings}/delete'
+ defaults:
+   _title: 'Delete quicktab'
+   _entity_form: settings.delete
+ requirements:
+   _permission: 'administer quicktabs'
+entity.settings.edit:
+  path: '/admin/structure/quicktabs/manage/{settings}/edit'
+  defaults:
+    _title: 'Edit quicktab'
+    _entity_form: settings.default
+  requirements:
+    _permission: 'administer quicktabs'
+entity.settings.clone:
+  path: '/admin/structure/quicktabs/manage/{settings}/clone'
+  defaults:
+    _title: 'Clone quicktab'
+    _entity_form: settings.clone
+  requirements:
+    _permission: 'administer quicktabs'
+entity.settings.export:
+  path: '/admin/structure/quicktabs/manage/{settings}/export'
+  defaults:
+    _title: 'Export quicktab'
+    _entity_form: settings.export
+  requirements:
+    _permission: 'administer quicktabs'
+quicktabs.ajax:
+  path: '/quicktabs/ajax'
+#  _controller: '\Drupal\quicktabs\Ajax\quicktabAjax::' Ask!!!
+  requirements:
+    _permission: 'Access Content'

@@ -1,0 +1,12 @@
+entity.settings.add:
+  route_name: entity.settings.add
+  title: 'Add quicktab Instance'
+  weight: 2
+  appears_on:
+    - quicktabs.admin
+quicktabs.list_tabs:
+  route_name: quicktabs.list_tabs
+  title: 'Show list of quicktabs'
+  weight: 1
+  appears_on:
+    - quicktabs.admin

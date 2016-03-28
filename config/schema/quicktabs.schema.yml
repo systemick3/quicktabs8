@@ -1,0 +1,22 @@
+quicktabs.settings:
+  type: config_entity
+  label: 'Quicktabs'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    title:
+      type: string
+      label: 'Title'
+    renderer:
+      type: integer
+      label: 'Renderer'
+    style:
+      type: string
+      label: 'Style'
+    ajax:
+      type: boolean
+      label: 'Ajax'
+    hide_empty_tabs:
+      type: integer
+      label: 'Hide empty tabs'

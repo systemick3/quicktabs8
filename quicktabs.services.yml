@@ -1,0 +1,4 @@
+services:
+  plugin.manager.quicktabs:
+    class: Drupal\quicktabs\QuicktabsManager
+    parent: default_plugin_manager

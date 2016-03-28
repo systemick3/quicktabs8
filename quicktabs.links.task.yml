@@ -1,0 +1,22 @@
+entity.settings.edit:
+  route_name: entity.settings.edit
+  title: 'Edit'
+  base_route: entity.settings.edit
+
+entity.settings.delete:
+  route_name: entity.settings.delete
+  title: 'Delete'
+  base_route: entity.settings.edit
+  weight: 100
+
+entity.settings.clone:
+  route_name: entity.settings.clone
+  title: 'Clone'
+  base_route: entity.settings.edit
+  weight: 101
+
+entity.settings.export:
+  route_name: entity.settings.export
+  title: 'Export'
+  base_route: entity.settings.edit
+  weight: 102
