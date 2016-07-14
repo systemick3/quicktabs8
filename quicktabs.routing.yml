@@ -1,0 +1,16 @@
+quicktabs.admin:
+  path: '/admin/structure/quicktabs'
+  defaults:
+    _title: 'Quick Tabs'
+    _entity_list: 'quicktabs_instance'
+  requirements:
+    _permission: 'administer quicktabs'
+  options:
+    _admin_route: TRUE
+quicktabs.admin.add:
+  path: '/admin/structure/quicktabs/add'
+  defaults:
+    _title: 'Add Quicktabs Instance'
+    _entity_form: quicktabs_instance.add
+  requirements:
+    _permission: 'administer quicktabs'

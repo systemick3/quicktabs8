@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Render content with tabs and other display styles
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function quicktabs_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'quicktabs.admin':
+      //return '<p>' . t('Each Quick Tabs instance has a corresponding block that is managed on the') . '</p>';
+      return '<p>' . t('Each Quicktabs instance has a corresponding block that is managed on the <a href="@blocks">blocks administration page</a>.', array('@blocks' => \Drupal::Url('block.admin_display'))) . '</p>';
+  }
+}
