@@ -16,22 +16,48 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['label'] = $entity->label();
-    $row['id'] = $entity->id();
-    $row['storage'] = $entity->getStorage();
-    $row['operations']['data'] = $this->buildOperations($entity);
-    return $row;
+    $row['label'] = $entity->getLabel();
+    $row['storage'] = $this->t('Normal');
+    return $row + parent::buildRow($entity);
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $row['label'] = $this->t('Label');
-    $row['id'] = $this->t('Machine name');
-    $row['storage'] = $this->t('Storage');
-    $row['operations'] = $this->t('Operations');
-    return $row;
+    $header['label'] = $this->t('Label');
+    $header['storage'] = $this->t('Storage');
+    return $header + parent::buildHeader();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity) {
+    $operations = parent::getDefaultOperations($entity);
+
+    if ($entity->hasLinkTemplate('edit')) {
+      $operations['edit'] = array(
+        'title' => t('Edit quicktab'),
+        'weight' => 10,
+        'url' => $entity->urlInfo('edit'),
+      );
+      $operations['delete'] = array(
+        'title' => t('Delete quicktab'),
+        'weight' => 20,
+        'url' => $entity->urlInfo('delete'),
+      );
+      $operations['clone'] = array(
+        'title' => t('Clone quicktab'),
+        'weight' => 30,
+        'url' => $entity->urlInfo('clone'),
+      );
+      $operations['export'] = array(
+        'title' => t('Export quicktab'),
+        'weight' => 40,
+        'url' => $entity->urlInfo('export'),
+      );
+    }
+    return $operations;
+  }
 }
