@@ -18,7 +18,7 @@ entity.quicktabs_instance.delete:
  path: '/admin/structure/quicktabs/{quicktabs_instance}/delete'
  defaults:
    _title: 'Delete quicktab'
-   _entity_form: quicktabs_instance..delete
+   _entity_form: quicktabs_instance.delete
  requirements:
    _permission: 'administer quicktabs'
 entity.quicktabs_instance.edit:

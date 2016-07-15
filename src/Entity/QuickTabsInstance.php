@@ -23,9 +23,9 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "form" = {
  *       "add" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
  *       "edit" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
- *       "delete" = "Drupal\quicktabs\Form\QuicktabDeleteForm",
- *       "clone" = "Drupal\quicktabs\Form\QuicktabCloneForm",
- *       "export" = "Drupal\quicktabs\Form\QuicktabExportForm"
+ *       "delete" = "Drupal\quicktabs\Form\QuickTabsInstanceDeleteForm",
+ *       "clone" = "Drupal\quicktabs\Form\QuickTabsInstanceCloneForm",
+ *       "export" = "Drupal\quicktabs\Form\QuickTabsInstanceExportForm"
  *     },
  *   },
  *   config_prefix = "quicktabs_instance",
