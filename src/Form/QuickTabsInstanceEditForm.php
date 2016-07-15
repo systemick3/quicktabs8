@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\quicktabs\Form\QuickTabsInstanceForm.php
+ * Contains \Drupal\quicktabs\Form\QuickTabsInstanceEditForm.php
  */
 
 namespace Drupal\quicktabs\Form;
@@ -12,16 +12,16 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityForm;
 
 /**
- * Class QuickTabsInstanceForm
+ * Class QuickTabsInstanceEditForm
  *
  */
-class QuickTabsInstanceForm extends EntityForm {
+class QuickTabsInstanceEditForm extends EntityForm {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'quicktab_instance';
+    return 'quicktab_instance_edit';
   }
 
   /**
@@ -33,8 +33,6 @@ class QuickTabsInstanceForm extends EntityForm {
     $form = parent::form($form, $form_state);
 
     $entity = $this->entity;
-
-    //$config = $this->config('quicktabs.settings');
 
     $form['label'] = array(
       '#title' => $this->t('Name'),
@@ -92,7 +90,6 @@ class QuickTabsInstanceForm extends EntityForm {
       '#default_value' => $this->entity->getStyle(),
       '#description' => $this->t('<p>Yet to be implemented</p>'),
     );
-
 
     $form['hide_empty_tabs'] = array(
       '#type' => 'checkbox',
