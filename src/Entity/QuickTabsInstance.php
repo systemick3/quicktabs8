@@ -21,7 +21,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   handlers = {
  *     "list_builder" = "Drupal\quicktabs\QuickTabsInstanceListBuilder",
  *     "form" = {
- *       "create" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
+ *       "add" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
  *       "edit" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
  *       "delete" = "Drupal\quicktabs\Form\QuicktabDeleteForm",
  *       "clone" = "Drupal\quicktabs\Form\QuicktabCloneForm",
@@ -34,11 +34,11 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "title" = "title"
  *   },
  *   links = {
- *     "edit" = "/admin/structure/quicktabs/manage/{settings}/edit",
+ *     "edit" = "/admin/structure/quicktabs/{quicktabs_instance}/edit",
  *     "add" = "/admin/structure/quicktabs/add",
- *     "delete" = "/admin/structure/quicktabs/manage/{settings}/delete",
- *     "clone" = "/admin/structure/quicktabs/manage/{settings}/clone",
- *     "export" = "/admin/structure/quicktabs/manage/{settings}/export"
+ *     "delete" = "/admin/structure/quicktabs/{quicktabs_instance}/delete",
+ *     "clone" = "/admin/structure/quicktabs/{quicktabs_instance}/clone",
+ *     "export" = "/admin/structure/quicktabs/{quicktabs_instance}/export"
  *   },
  *   config_export = {
  *     "id" = "id",
@@ -95,6 +95,13 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
    */
   protected $hide_empty_tabs;
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLabel() {
+    return $this->label;
+  }
 
   /**
    * {@inheritdoc}
