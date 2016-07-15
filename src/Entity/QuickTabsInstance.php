@@ -16,7 +16,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *
  * @ConfigEntityType(
  *   id = "quicktabs_instance",
- *   label = @Translation("Quicktabs"),
+ *   label = @Translation("Quick Tabs"),
  *   module = "quicktabs",
  *   handlers = {
  *     "list_builder" = "Drupal\quicktabs\QuickTabsInstanceListBuilder",
@@ -24,21 +24,19 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *       "add" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
  *       "edit" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
  *       "delete" = "Drupal\quicktabs\Form\QuickTabsInstanceDeleteForm",
- *       "clone" = "Drupal\quicktabs\Form\QuickTabsInstanceCloneForm",
- *       "export" = "Drupal\quicktabs\Form\QuickTabsInstanceExportForm"
+ *       "duplicate" = "Drupal\quicktabs\Form\QuickTabsInstanceDuplicateForm",
  *     },
  *   },
  *   config_prefix = "quicktabs_instance",
  *   entity_keys = {
  *     "id" = "id",
- *     "title" = "title"
+ *     "label" = "label"
  *   },
  *   links = {
  *     "edit" = "/admin/structure/quicktabs/{quicktabs_instance}/edit",
  *     "add" = "/admin/structure/quicktabs/add",
  *     "delete" = "/admin/structure/quicktabs/{quicktabs_instance}/delete",
- *     "clone" = "/admin/structure/quicktabs/{quicktabs_instance}/clone",
- *     "export" = "/admin/structure/quicktabs/{quicktabs_instance}/export"
+ *     "duplicate" = "/admin/structure/quicktabs/{quicktabs_instance}/duplicate"
  *   },
  *   config_export = {
  *     "id" = "id",
