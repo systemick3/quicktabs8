@@ -16,7 +16,7 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['label'] = $entity->getLabel();
+    $row['label'] = $entity->label();
     $row['storage'] = $this->t('Normal');
     return $row + parent::buildRow($entity);
   }
@@ -25,7 +25,7 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['label'] = $this->t('Label');
+    $header['label'] = $this->t('Name');
     $header['storage'] = $this->t('Storage');
     return $header + parent::buildHeader();
   }
@@ -47,15 +47,10 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
         'weight' => 20,
         'url' => $entity->urlInfo('delete'),
       );
-      $operations['clone'] = array(
-        'title' => t('Clone quicktab'),
-        'weight' => 30,
-        'url' => $entity->urlInfo('clone'),
-      );
-      $operations['export'] = array(
-        'title' => t('Export quicktab'),
+      $operations['duplicate'] = array(
+        'title' => t('Duplicate quicktab'),
         'weight' => 40,
-        'url' => $entity->urlInfo('export'),
+        'url' => $entity->urlInfo('duplicate'),
       );
     }
     return $operations;

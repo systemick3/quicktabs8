@@ -37,13 +37,13 @@ class QuickTabsInstanceForm extends EntityForm {
     //$config = $this->config('quicktabs.settings');
 
     $form['label'] = array(
-      '#title' => $this->t('Label'),
+      '#title' => $this->t('Name'),
       '#description' => $this->t('This will appear as the block title.'),
       '#type' => 'textfield',
-      '#default_value' => $this->entity->getLabel(),
+      '#default_value' => $this->entity->label(),
       '#weight' => -9,
       '#required' => TRUE,
-      '#placeholder' => $this->t('Enter label'),
+      '#placeholder' => $this->t('Enter name'),
     );
 
     $form['id'] = array(
@@ -190,20 +190,10 @@ class QuickTabsInstanceForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $label = $form_state->getValue('label');
-    $id = $form_state->getValue('id');
-    $renderer = $form_state->getValue('renderer');
-    $ajax = $form_state->getValue('ajax');
-    $hide_empty_tabs = $form_state->getValue('hide_empty_tabs');
-    $entity = $this->entity;
-    $entity->set('label',$label);
-    $entity->set('id',$id);
-    $entity->set('renderer',$renderer);
-    $entity->set('ajax',$ajax);
-    $entity->set('hide_empty_tabs',$hide_empty_tabs);
-    $status = $entity->save();
+    $this->entity->save();
     if($status==SAVED_NEW) {
       $form_state->setRedirect('quicktabs.admin');
     }
+    drupal_set_message($this->t('Your changes have been saved.'));
   }
 }

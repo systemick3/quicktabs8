@@ -28,17 +28,10 @@ entity.quicktabs_instance.edit:
     _entity_form: quicktabs_instance.edit
   requirements:
     _permission: 'administer quicktabs'
-entity.quicktabs_instance.clone:
-  path: '/admin/structure/quicktabs/{quicktabs_instance}/clone'
+entity.quicktabs_instance.duplicate:
+  path: '/admin/structure/quicktabs/{quicktabs_instance}/duplicate'
   defaults:
-    _title: 'Clone quicktab'
-    _entity_form: quicktabs_instance.clone
-  requirements:
-    _permission: 'administer quicktabs'
-entity.quicktabs_instance.export:
-  path: '/admin/structure/quicktabs/{quicktabs_instance}/export'
-  defaults:
-    _title: 'Export quicktab'
-    _entity_form: quicktabs_instance.export
+    _title: 'Duplicate quicktab'
+    _entity_form: quicktabs_instance.duplicate
   requirements:
     _permission: 'administer quicktabs'
