@@ -187,7 +187,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->entity->save();
+    $status = $this->entity->save();
     if($status==SAVED_NEW) {
       $form_state->setRedirect('quicktabs.admin');
     }
