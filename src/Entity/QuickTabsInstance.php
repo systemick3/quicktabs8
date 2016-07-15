@@ -21,8 +21,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   handlers = {
  *     "list_builder" = "Drupal\quicktabs\QuickTabsInstanceListBuilder",
  *     "form" = {
- *       "add" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
- *       "edit" = "Drupal\quicktabs\Form\QuickTabsInstanceForm",
+ *       "add" = "Drupal\quicktabs\Form\QuickTabsInstanceEditForm",
+ *       "edit" = "Drupal\quicktabs\Form\QuickTabsInstanceEditForm",
  *       "delete" = "Drupal\quicktabs\Form\QuickTabsInstanceDeleteForm",
  *       "duplicate" = "Drupal\quicktabs\Form\QuickTabsInstanceDuplicateForm",
  *     },
