@@ -128,4 +128,18 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
   public function getHideEmptyTabs() {
     return $this->hide_empty_tabs;
   }
+  
+  /**
+   * Loads a quicktabs_instance from configuration and returns it.
+   *
+   * @param string $id
+   *   The qti ID to load.
+   *
+   * @return \Drupal\quicktabs\Entity\QuickTabsInstance
+   *   The loaded entity.
+   */
+  public static function getQuicktabsInstance($id) {
+    $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($id);
+    return $qt;
+  }
 }
