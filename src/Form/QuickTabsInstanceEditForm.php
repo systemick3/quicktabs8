@@ -34,6 +34,14 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
     $entity = $this->entity;
 
+    if (empty($this->entity->tabs)) {
+      $qt = new \stdClass;
+      $qt->tabs = array(
+        0 => array(),
+        1 => array(),
+      );
+    }
+
     $form['label'] = array(
       '#title' => $this->t('Name'),
       '#description' => $this->t('This will appear as the block title.'),
@@ -127,6 +135,57 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#suffix' => '</div>',
       //'#theme' => 'quicktabs_admin_form_tabs',
     );
+
+    $type = \Drupal::service('plugin.manager.tab_type');
+    $plugin_definitions = $type->getDefinitions();
+
+    $types = array();
+    foreach ($plugin_definitions as $index => $def) {
+      $name = $def['name'];
+      $types[$name->render()] = $name->render();
+    }
+
+    ksort($types);
+    for ($i=0; $i<count($qt->tabs); $i++) {
+      $form['qt_wrapper']['tabs'][$i]['title'] = array(
+        '#type' => 'textfield',
+        '#size' => '10',
+        '#default_value' => isset($tab['title']) ? $tab['title'] : '',
+      );
+      $form['qt_wrapper']['tabs'][$i]['weight'] = array(
+        '#type' => 'weight',
+        '#default_value' => isset($tab['weight']) ? $tab['weight'] : $delta-100,
+        '#delta' => 100,
+      );
+      $form['qt_wrapper']['tabs'][$i]['type'] = array(
+        '#type' => 'radios',
+        '#options' => $types,
+        '#default_value' => isset($tab['type']) ? $tab['type'] : key($tabtypes),
+      );
+      $form['qt_wrapper']['tabs'][$i]['content'] = array(
+        '#type' => 'markup',
+        '#markup' => 'content ' . $i,
+      );
+      $form['qt_wrapper']['tabs'][$i]['operations'] = array(
+        '#type' => 'markup',
+        '#markup' => 'operations ' . $i,
+      );
+      $form['qt_wrapper']['tabs'][$i]['operations'] = array(
+        '#type' => 'submit',
+        '#prefix' => '<div>',
+        '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
+        '#value' => 'remove_' . $delta,
+        '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
+        '#submit' => array('quicktabs_remove_tab_submit'),
+        '#ajax' => array(
+          'callback' => 'quicktabs_ajax_callback',
+          'wrapper' => 'quicktab-tabs',
+          'method' => 'replace',
+          'effect' => 'fade',
+        ),
+        '#limit_validation_errors' => array(),
+      );
+    }
 
     $form['qt_wrapper']['tabs']['operations'] = array(
       '#type' => 'operations',
