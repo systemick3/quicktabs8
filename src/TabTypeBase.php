@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Contains \Drupal\quicktabs\TabTypeBase.
+ */
+
+namespace Drupal\quicktabs;
+
+use Drupal\Component\Plugin\PluginBase;
+
+class TabTypeBase extends PluginBase implements TabTypeInterface {
+
+  public function getName() {
+    return $this->pluginDefinition['name'];
+  }
+}
