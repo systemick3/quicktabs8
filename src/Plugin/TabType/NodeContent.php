@@ -16,4 +16,12 @@ use Drupal\quicktabs\TabTypeBase;
  *   name = @Translation("node"),
  * )
  */
-class NodeContent extends TabTypeBase {}
+class NodeContent extends TabTypeBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm() {
+    return array();
+  }
+}

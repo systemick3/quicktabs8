@@ -16,4 +16,12 @@ use Drupal\quicktabs\TabTypeBase;
  *   name = @Translation("view"),
  * )
  */
-class ViewContent extends TabTypeBase {}
+class ViewContent extends TabTypeBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm() {
+    return array();
+  }
+}

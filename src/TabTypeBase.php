@@ -8,9 +8,14 @@ namespace Drupal\quicktabs;
 
 use Drupal\Component\Plugin\PluginBase;
 
-class TabTypeBase extends PluginBase implements TabTypeInterface {
+abstract class TabTypeBase extends PluginBase implements TabTypeInterface {
 
   public function getName() {
     return $this->pluginDefinition['name'];
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  abstract public function optionsForm();
 }
