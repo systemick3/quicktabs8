@@ -163,13 +163,20 @@ class QuickTabsInstanceEditForm extends EntityForm {
         '#default_value' => isset($tab['type']) ? $tab['type'] : key($tabtypes),
       );
       $form['qt_wrapper']['tabs'][$i]['content'] = array(
-        '#type' => 'markup',
-        '#markup' => 'content ' . $i,
+        '#prefix' => '<div class="types-wrapper">',
+        '#suffix' => '</div>'
       );
-      $form['qt_wrapper']['tabs'][$i]['operations'] = array(
-        '#type' => 'markup',
-        '#markup' => 'operations ' . $i,
-      );
+      
+      foreach ($plugin_definitions as $index => $def) {
+        $name = $def['name'];
+        $form['qt_wrapper']['tabs'][$i]['content'][$name->render()] = array(
+          '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
+          '#suffix' =>'</div>',
+        );
+        $object = $type->createInstance($index);
+        $form['qt_wrapper']['tabs'][$i]['content'][$name->render()]['options'] = $object->optionsForm();
+      }
+ 
       $form['qt_wrapper']['tabs'][$i]['operations'] = array(
         '#type' => 'submit',
         '#prefix' => '<div>',

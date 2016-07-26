@@ -19,4 +19,11 @@ interface TabTypeInterface extends PluginInspectionInterface {
    * @return string
    */
   public function getName();
+  
+  /**
+   * Return form elemets used on the edit/add from.
+   *
+   * @return array
+   */
+  //public function optionsForm();
 }

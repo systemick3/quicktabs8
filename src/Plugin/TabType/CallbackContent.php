@@ -16,4 +16,12 @@ use Drupal\quicktabs\TabTypeBase;
  *   name = @Translation("callback"),
  * )
  */
-class CallbackContent extends TabTypeBase {}
+class CallbackContent extends TabTypeBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm() {
+    return array();
+  }
+}

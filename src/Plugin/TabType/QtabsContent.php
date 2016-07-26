@@ -16,4 +16,12 @@ use Drupal\quicktabs\TabTypeBase;
  *   name = @Translation("qtabs"),
  * )
  */
-class QtabsContent extends TabTypeBase {}
+class QtabsContent extends TabTypeBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm() {
+    return array();
+  }
+}
