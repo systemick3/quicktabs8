@@ -107,6 +107,93 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -4,
     );
 
+    $form['mytable'] = array(
+      '#type' => 'table',
+      '#header' => array(
+         t('Tab title'),
+         t('Tab weight'),
+         t('Tab type'),
+         t('Tab content'),
+         t('Operations'),
+      ),
+      '#empty' => t('There are no tabs yet'),
+      //'#tableselect' => TRUE,
+      '#tabledrag' => array(
+        array(
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'mytable-order-weight',
+        ),
+      ),
+    );
+
+    $type = \Drupal::service('plugin.manager.tab_type');
+    $plugin_definitions = $type->getDefinitions();
+
+    $types = array();
+    foreach ($plugin_definitions as $index => $def) {
+      $name = $def['name'];
+      $types[$name->render()] = $name->render();
+    }
+
+    ksort($types);
+    for ($i=0; $i<count($qt->tabs); $i++) {
+      // TableDrag: Mark the table row as draggable.
+      $form['mytable'][$i]['#attributes']['class'][] = 'draggable';
+      // TableDrag: Sort the table row according to its existing/configured weight.
+      $form['mytable'][$i]['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+      
+      $form['mytable'][$i]['title'] = array(
+        '#type' => 'textfield',
+        '#size' => '10',
+        '#default_value' => isset($tab['title']) ? $tab['title'] : '',
+      );
+
+      // TableDrag: Weight column element.
+      $form['mytable'][$i]['weight'] = array(
+        '#type' => 'weight',
+        //'#title' => t('Weight for @title', array('@title' => $entity->label())),
+        '#title' => t('Weight'),
+        '#title_display' => 'invisible',
+        '#default_value' =>  isset($tab['weight']) ? $tab['weight'] : 0,
+        // Classify the weight element for #tabledrag.
+        '#attributes' => array('class' => array('mytable-order-weight')),
+      );
+      
+      $form['mytable'][$i]['type'] = array(
+        '#type' => 'radios',
+        '#options' => $types,
+        '#default_value' => isset($tab['type']) ? $tab['type'] : key($tabtypes),
+      );
+      
+      foreach ($plugin_definitions as $index => $def) {
+        $name = $def['name'];
+        $form['mytable'][$i]['content'][$name->render()] = array(
+          '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
+          '#suffix' =>'</div>',
+        );
+        $object = $type->createInstance($index);
+        $form['mytable'][$i]['content'][$name->render()]['options'] = $object->optionsForm();
+      }
+
+      $form['mytable'][$i]['operations'] = array(
+        '#type' => 'submit',
+        '#prefix' => '<div>',
+        '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
+        '#value' => 'remove_' . $delta,
+        '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
+        '#submit' => array('quicktabs_remove_tab_submit'),
+        '#ajax' => array(
+          'callback' => 'quicktabs_ajax_callback',
+          'wrapper' => 'quicktab-tabs',
+          'method' => 'replace',
+          'effect' => 'fade',
+        ),
+        '#limit_validation_errors' => array(),
+      );
+    }
+
+    /**
     $form['qt_wrapper'] = array(
       '#tree' => FALSE,
       '#weight' => -3,
@@ -202,27 +289,30 @@ class QuickTabsInstanceEditForm extends EntityForm {
       'title' => $this->t('Edit'),
       'url' => Url::fromRoute('quicktabs.add'),
     );
+
+    */
+
     $form['qt_wrapper']['tabs_more'] = array(
-        '#type' => 'submit',
-        '#prefix' => '<div id="add-more-tabs-button">',
-        '#suffix' => '<label for="edit-tabs-more">' . t('Add tab') . '</label></div>',
-        '#value' => t('More tabs'),
-        '#attributes' => array(
-          'class' => array('add-tab'),
-          'title' => t('Click here to add more tabs.')
-        ),
-        '#weight' => 1,
-        '#submit' => array('quicktabs_more_tabs_submit'),
-        '#ajax' => array(
-          'callback' => 'quicktabs_ajax_callback',
-          'wrapper' => 'quicktab-tabs',
-          'effect' => 'fade',
-        ),
-        '#limit_validation_errors' => array(),
+      '#type' => 'submit',
+      '#prefix' => '<div id="add-more-tabs-button">',
+      '#suffix' => '<label for="edit-tabs-more">' . t('Add tab') . '</label></div>',
+      '#value' => t('More tabs'),
+      '#attributes' => array(
+        'class' => array('add-tab'),
+        'title' => t('Click here to add more tabs.')
+      ),
+      '#weight' => 1,
+      '#submit' => array('quicktabs_more_tabs_submit'),
+      '#ajax' => array(
+        'callback' => 'quicktabs_ajax_callback',
+        'wrapper' => 'quicktab-tabs',
+        'effect' => 'fade',
+      ),
+      '#limit_validation_errors' => array(),
     );
 
-      return $form;
-    }
+    return $form;
+  }
 
   /**
    * {@inheritdoc}
