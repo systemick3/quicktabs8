@@ -21,7 +21,7 @@ class CallbackContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm() {
+  public function optionsForm($tab) {
     return array();
   }
 }

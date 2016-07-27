@@ -23,19 +23,19 @@ class BlockContent extends TabTypeBase {
    * {@inheritdoc}
    */
   //public function optionsForm($delta, $qt) {
-  public function optionsForm() {
-    $tab = $this->settings;
+  public function optionsForm($tab) {
+    $plugin_name =  $this->getPluginDefinition()['name'];
     $form = array();
-    $form['block']['bid'] = array(
+    $form['bid'] = array(
       '#type' => 'select',
       '#options' => $this->getBlockOptions(),
-      '#default_value' => isset($tab['bid']) ? $tab['bid'] : '',
+      '#default_value' => isset($tab['content'][$plugin_name->render()]['options']['bid']) ? $tab['content'][$plugin_name->render()]['options']['bid'] : '',
       '#title' => t('Select a block'),
     );
-    $form['block']['hide_title'] = array(
+    $form['hide_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Hide the title of this block'),
-      '#default_value' => isset($tab['hide_title']) ? $tab['hide_title'] : 1,
+      '#default_value' => isset($tab['content'][$plugin_name->render()]['options']['hide_title']) ? $tab['content'][$plugin_name->render()]['options']['hide_title'] : 0,
     );
     return $form;
   }

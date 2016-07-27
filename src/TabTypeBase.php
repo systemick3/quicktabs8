@@ -17,5 +17,5 @@ abstract class TabTypeBase extends PluginBase implements TabTypeInterface {
   /**
    * {@inheritdoc}
    */
-  abstract public function optionsForm();
+  abstract public function optionsForm($tab);
 }
