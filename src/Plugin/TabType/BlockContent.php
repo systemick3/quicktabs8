@@ -7,6 +7,7 @@
 namespace Drupal\quicktabs\Plugin\TabType;
 
 use Drupal\quicktabs\TabTypeBase;
+use Drupal\block\BlockListBuilder;
 
 /**
  * Provides a 'blcok content' tab type.
@@ -27,8 +28,7 @@ class BlockContent extends TabTypeBase {
     $form = array();
     $form['block']['bid'] = array(
       '#type' => 'select',
-      //'#options' => quicktabs_get_blocks(),
-      '#options' => array('test1' => 'Test 1', 'test2' => 'Test 2'),
+      '#options' => $this->getBlockOptions(),
       '#default_value' => isset($tab['bid']) ? $tab['bid'] : '',
       '#title' => t('Select a block'),
     );
@@ -39,7 +39,20 @@ class BlockContent extends TabTypeBase {
     );
     return $form;
   }
-  //public function optionsForm() {
-    //return array();
-  //}
+
+  private function getBlockOptions() {
+    $config = \Drupal::config('system.theme');
+    $default_theme = $config->get('default');
+    $block_storage = \Drupal::entityManager()->getStorage('block');
+    $entities = $block_storage->loadMultiple();
+    $blocks = [];
+    foreach ($entities as $entity_id => $entity) {
+      if ($entity->getTheme() === $default_theme) {
+        $definition = $entity->getPlugin()->getPluginDefinition();
+        $blocks[$entity_id] = $entity->label() . ' (' . $definition['category'] . ')';
+      }
+    }
+    
+    return $blocks;
+  }
 }
