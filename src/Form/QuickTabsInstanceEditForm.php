@@ -32,14 +32,15 @@ class QuickTabsInstanceEditForm extends EntityForm {
     
     $form = parent::form($form, $form_state);
 
-    $entity = $this->entity;
-
-    if (empty($this->entity->tabs)) {
-      $qt = new \stdClass;
+    $qt = new \stdClass;
+    if (empty($this->entity->getConfigurationData())) {
       $qt->tabs = array(
         0 => array(),
         1 => array(),
       );
+    }
+    else {
+      $qt->tabs = $this->entity->getConfigurationData();
     }
 
     $form['label'] = array(
@@ -107,7 +108,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -4,
     );
 
-    $form['mytable'] = array(
+    $form['configuration_data'] = array(
       '#type' => 'table',
       '#header' => array(
          t('Tab title'),
@@ -138,21 +139,21 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
     ksort($types);
     for ($i=0; $i<count($qt->tabs); $i++) {
+      $tab = $qt->tabs[$i];
       // TableDrag: Mark the table row as draggable.
-      $form['mytable'][$i]['#attributes']['class'][] = 'draggable';
+      $form['configuration_data'][$i]['#attributes']['class'][] = 'draggable';
       // TableDrag: Sort the table row according to its existing/configured weight.
-      $form['mytable'][$i]['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+      $form['configuration_data'][$i]['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
       
-      $form['mytable'][$i]['title'] = array(
+      $form['configuration_data'][$i]['title'] = array(
         '#type' => 'textfield',
         '#size' => '10',
         '#default_value' => isset($tab['title']) ? $tab['title'] : '',
       );
 
       // TableDrag: Weight column element.
-      $form['mytable'][$i]['weight'] = array(
+      $form['configuration_data'][$i]['weight'] = array(
         '#type' => 'weight',
-        //'#title' => t('Weight for @title', array('@title' => $entity->label())),
         '#title' => t('Weight'),
         '#title_display' => 'invisible',
         '#default_value' =>  isset($tab['weight']) ? $tab['weight'] : 0,
@@ -160,23 +161,23 @@ class QuickTabsInstanceEditForm extends EntityForm {
         '#attributes' => array('class' => array('mytable-order-weight')),
       );
       
-      $form['mytable'][$i]['type'] = array(
+      $form['configuration_data'][$i]['type'] = array(
         '#type' => 'radios',
         '#options' => $types,
-        '#default_value' => isset($tab['type']) ? $tab['type'] : key($tabtypes),
+        '#default_value' => isset($tab['type']) ? $tab['type'] : key($types),
       );
       
       foreach ($plugin_definitions as $index => $def) {
         $name = $def['name'];
-        $form['mytable'][$i]['content'][$name->render()] = array(
+        $form['configuration_data'][$i]['content'][$name->render()] = array(
           '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
           '#suffix' =>'</div>',
         );
         $object = $type->createInstance($index);
-        $form['mytable'][$i]['content'][$name->render()]['options'] = $object->optionsForm();
+        $form['configuration_data'][$i]['content'][$name->render()]['options'] = $object->optionsForm($tab);
       }
 
-      $form['mytable'][$i]['operations'] = array(
+      $form['configuration_data'][$i]['operations'] = array(
         '#type' => 'submit',
         '#prefix' => '<div>',
         '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
@@ -339,6 +340,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       }
     }
   }
+  
   /**
    * {@inheritdoc}
    */

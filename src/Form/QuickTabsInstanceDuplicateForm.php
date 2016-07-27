@@ -62,7 +62,7 @@ class QuickTabsInstanceDuplicateForm extends EntityForm {
   }
 
   /**
-   * Form submission handler for the 'clone' action.
+   * Form submission handler for the 'duplicate' action.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
