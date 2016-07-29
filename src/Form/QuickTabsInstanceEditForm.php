@@ -201,60 +201,81 @@ class QuickTabsInstanceEditForm extends EntityForm {
     ksort($types);
     for ($i=0; $i<count($qt->tabs); $i++) {
       $tab = $qt->tabs[$i];
-      // TableDrag: Mark the table row as draggable.
-      $configuration_data[$i]['#attributes']['class'][] = 'draggable';
-      // TableDrag: Sort the table row according to its existing/configured weight.
-      $configuration_data[$i]['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
-      
-      $configuration_data[$i]['title'] = array(
-        '#type' => 'textfield',
-        '#size' => '10',
-        '#default_value' => isset($tab['title']) ? $tab['title'] : '',
-      );
-
-      // TableDrag: Weight column element.
-      $configuration_data[$i]['weight'] = array(
-        '#type' => 'weight',
-        '#title' => t('Weight'),
-        '#title_display' => 'invisible',
-        '#default_value' =>  isset($tab['weight']) ? $tab['weight'] : 0,
-        // Classify the weight element for #tabledrag.
-        '#attributes' => array('class' => array('mytable-order-weight')),
-      );
-      
-      $configuration_data[$i]['type'] = array(
-        '#type' => 'radios',
-        '#options' => $types,
-        '#default_value' => isset($tab['type']) ? $tab['type'] : key($types),
-      );
-      
-      foreach ($plugin_definitions as $index => $def) {
-        $name = $def['name'];
-        $configuration_data[$i]['content'][$name->render()] = array(
-          '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
-          '#suffix' =>'</div>',
-        );
-        $object = $type->createInstance($index);
-        $configuration_data[$i]['content'][$name->render()]['options'] = $object->optionsForm($tab);
-      }
-
-      $configuration_data[$i]['operations'] = array(
-        '#type' => 'submit',
-        '#prefix' => '<div>',
-        '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
-        '#value' => 'remove_' . $delta,
-        '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
-        '#submit' => array('quicktabs_remove_tab_submit'),
-        '#ajax' => array(
-          'callback' => 'quicktabs_ajax_callback',
-          'wrapper' => 'quicktab-tabs',
-          'method' => 'replace',
-          'effect' => 'fade',
-        ),
-        '#limit_validation_errors' => array(),
-      );
+      $configuration_data[$i] = $this->getRow($tab);
     }
     
     return $configuration_data;
+  }
+
+  private function getRow($tab = NULL) {
+    if ($tab === NULL) {
+      $tab = array();
+    }
+
+    $type = \Drupal::service('plugin.manager.tab_type');
+    $plugin_definitions = $type->getDefinitions();
+
+    $types = array();
+    foreach ($plugin_definitions as $index => $def) {
+      $name = $def['name'];
+      $types[$name->render()] = $name->render();
+    }
+
+    ksort($types);
+    $row = array();
+    // TableDrag: Mark the table row as draggable.
+    $row['#attributes']['class'][] = 'draggable';
+    // TableDrag: Sort the table row according to its existing/configured weight.
+    $row['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+      
+    $row['title'] = array(
+      '#type' => 'textfield',
+      '#size' => '10',
+      '#default_value' => isset($tab['title']) ? $tab['title'] : '',
+    );
+
+    // TableDrag: Weight column element.
+    $row['weight'] = array(
+      '#type' => 'weight',
+      '#title' => t('Weight'),
+      '#title_display' => 'invisible',
+      '#default_value' =>  isset($tab['weight']) ? $tab['weight'] : 0,
+      // Classify the weight element for #tabledrag.
+      '#attributes' => array('class' => array('mytable-order-weight')),
+    );
+      
+    $row['type'] = array(
+      '#type' => 'radios',
+      '#options' => $types,
+      '#default_value' => isset($tab['type']) ? $tab['type'] : key($types),
+    );
+      
+    foreach ($plugin_definitions as $index => $def) {
+      $name = $def['name'];
+      $row['content'][$name->render()] = array(
+        '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
+        '#suffix' =>'</div>',
+      );
+      $object = $type->createInstance($index);
+      $row['content'][$name->render()]['options'] = $object->optionsForm($tab);
+    }
+
+    $row['operations'] = array(
+      '#type' => 'submit',
+      '#prefix' => '<div>',
+      '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
+      '#value' => 'remove_' . $delta,
+      '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
+      '#submit' => array('quicktabs_remove_tab_submit'),
+      '#ajax' => array(
+        'callback' => 'quicktabs_ajax_callback',
+        'wrapper' => 'quicktab-tabs',
+        'method' => 'replace',
+        'effect' => 'fade',
+      ),
+      '#limit_validation_errors' => array(),
+    );
+
+    return $row;
   }
 }
