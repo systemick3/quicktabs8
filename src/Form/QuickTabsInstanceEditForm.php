@@ -101,15 +101,32 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
 
     $qt = new \stdClass;
-    if (empty($this->entity->getConfigurationData())) {
+    if (!empty($form_state->getValue('configuration_data'))) {
+      $qt->tabs = $form_state->getValue('configuration_data');
+    }
+    else {
+      $qt->tabs = $this->entity->getConfigurationData();
+    }
+
+    // Show 2 empty tabs when adding a new QT instance
+    if (empty($qt->tabs)) {
       $qt->tabs = array(
         0 => array(),
         1 => array(),
       );
     }
     else {
-      $qt->tabs = $this->entity->getConfigurationData();
+      if (is_numeric($form_state->get('to_remove'))) {
+        unset($qt->tabs[$form_state->get('to_remove')]);
+        $form_state->set('num_tabs', $form_state->get('num_tabs') - 1);
+      }
+
+      if ($form_state->get('num_tabs') > count($qt->tabs)) {
+        $qt->tabs[] = array();
+      }
     }
+
+    $form_state->set('num_tabs', count($qt->tabs));
 
     $form['configuration_data_wrapper'] = array(
       '#tree' => FALSE,
@@ -119,56 +136,52 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
     $form['configuration_data_wrapper']['configuration_data'] = $this->getConfigurationDataForm($qt);
 
-    $form['tabs_more'] = array(
+    $form['configuration_data_wrapper']['tabs_more'] = array(
+      '#name' => 'tabs_more',
       '#type' => 'submit',
-      '#prefix' => '<div id="add-more-tabs-button">',
-      '#suffix' => '<label for="edit-tabs-more">' . t('Add tab') . '</label></div>',
-      '#value' => t('More tabs'),
+      '#value' => t('Add tab'),
       '#attributes' => array(
         'class' => array('add-tab'),
         'title' => t('Click here to add more tabs.')
       ),
       '#weight' => 1,
-      '#submit' => array('quicktabs_more_tabs_submit'),
+      '#submit' => array(array($this, 'ajaxFormSubmit')),
       '#ajax' => array(
-        'callback' => array($this, 'getRowCallback'),
+        'callback' => array($this, 'ajaxFormCallback'),
         'progress' => array(
           'type' => 'throbber',
           'message' => NULL,
         ), 
         'effect' => 'fade',
       ),
-      '#limit_validation_errors' => array(),
     );
 
     return $form;
   }
 
-  public function getRowCallback(array &$form, FormStateInterface $form_state) {
-    $row_count = 0;
-    foreach ($form['configuration_data_wrapper']['configuration_data'] as $index => $item) {
-      if (is_numeric($index)) {
-        $row_count++;
-      }
-    }
-
-    $form['configuration_data_wrapper']['configuration_data'][$row_count] = $this->getRow($row_count);
-
-    $form['test']['t1'] = array(
-      '#type' => 'checkboxes',
-      '#options' => array('op1' => 'Option 1', 'op2' => 'Option 2'),
-    );
-    $form['test']['t2'] = array(
-      '#type' => 'textfield',
-      '#size' => '10',
-      '#default_value' => isset($tab['title']) ? $tab['title'] : '',
-    );
-
+  /**
+   * Ajax callback for the add tab and remove tab buttons.
+   */
+  public function ajaxFormCallback(array &$form, FormStateInterface $form_state) {
     // Instantiate an AjaxResponse Object to return.
     $ajax_response = new AjaxResponse();
     $ajax_response->addCommand(new HtmlCommand('#configuration-data-wrapper', $form['configuration_data_wrapper']['configuration_data']));
 
     return $ajax_response;
+  }
+
+  /**
+   * Submit handler for the 'Add Tab' and 'Remove' buttons.
+   */
+  public function ajaxFormSubmit(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getTriggeringElement()['#name'] === 'tabs_more') {
+      $form_state->set('num_tabs', count($form_state->getValue('configuration_data')) + 1);
+      $form_state->setRebuild(TRUE);
+    }
+    else if (is_numeric($form_state->getTriggeringElement()['#row_number'])) {
+      $form_state->set('to_remove', $form_state->getTriggeringElement()['#row_number']);
+      $form_state->setRebuild(TRUE);
+    }
   }
 
   /**
@@ -209,7 +222,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
   }
 
   private function getConfigurationDataForm($qt) {
-    //$qt->tabs[] = array();
     $configuration_data = array(
       '#type' => 'table',
       '#header' => array(
@@ -229,9 +241,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
       ),
     );
 
-    for ($i=0; $i<count($qt->tabs); $i++) {
-      $tab = $qt->tabs[$i];
-      $configuration_data[$i] = $this->getRow($i, $tab);
+    foreach ($qt->tabs as $index => $tab) {
+      $configuration_data[$index] = $this->getRow($index, $tab);
     }
     
     return $configuration_data;
@@ -293,19 +304,19 @@ class QuickTabsInstanceEditForm extends EntityForm {
     }
 
     $row['operations'] = array(
+      '#row_number' => $row_number,
       '#type' => 'submit',
-      '#prefix' => '<div>',
-      '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
-      '#value' => 'remove_' . $row_number,
+      '#value' => $this->t('Remove'),
       '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
-      '#submit' => array('quicktabs_remove_tab_submit'),
+      '#submit' => array(array($this, 'ajaxFormSubmit')),
       '#ajax' => array(
-        'callback' => 'quicktabs_ajax_callback',
-        'wrapper' => 'quicktab-tabs',
-        'method' => 'replace',
+        'callback' => array($this, 'ajaxFormCallback'),
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ), 
         'effect' => 'fade',
       ),
-      '#limit_validation_errors' => array(),
     );
 
     return $row;
