@@ -10,6 +10,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\AppendCommand;
+use Drupal\Core\Ajax\HtmlCommand;
 
 /**
  * Class QuickTabsInstanceEditForm
@@ -108,7 +111,13 @@ class QuickTabsInstanceEditForm extends EntityForm {
       $qt->tabs = $this->entity->getConfigurationData();
     }
 
-    $form['configuration_data'] = $this->getConfigurationDataForm($qt);
+    $form['configuration_data_wrapper'] = array(
+      '#tree' => FALSE,
+      '#weight' => -3,
+      '#prefix' => '<div class="clear-block" id="configuration-data-wrapper">',
+      '#suffix' => '</div>',
+    );
+    $form['configuration_data_wrapper']['configuration_data'] = $this->getConfigurationDataForm($qt);
 
     $form['tabs_more'] = array(
       '#type' => 'submit',
@@ -122,14 +131,44 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => 1,
       '#submit' => array('quicktabs_more_tabs_submit'),
       '#ajax' => array(
-        'callback' => 'quicktabs_ajax_callback',
-        'wrapper' => 'quicktab-tabs',
+        'callback' => array($this, 'getRowCallback'),
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ), 
         'effect' => 'fade',
       ),
       '#limit_validation_errors' => array(),
     );
 
     return $form;
+  }
+
+  public function getRowCallback(array &$form, FormStateInterface $form_state) {
+    $row_count = 0;
+    foreach ($form['configuration_data_wrapper']['configuration_data'] as $index => $item) {
+      if (is_numeric($index)) {
+        $row_count++;
+      }
+    }
+
+    $form['configuration_data_wrapper']['configuration_data'][$row_count] = $this->getRow($row_count);
+
+    $form['test']['t1'] = array(
+      '#type' => 'checkboxes',
+      '#options' => array('op1' => 'Option 1', 'op2' => 'Option 2'),
+    );
+    $form['test']['t2'] = array(
+      '#type' => 'textfield',
+      '#size' => '10',
+      '#default_value' => isset($tab['title']) ? $tab['title'] : '',
+    );
+
+    // Instantiate an AjaxResponse Object to return.
+    $ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new HtmlCommand('#configuration-data-wrapper', $form['configuration_data_wrapper']['configuration_data']));
+
+    return $ajax_response;
   }
 
   /**
@@ -170,6 +209,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
   }
 
   private function getConfigurationDataForm($qt) {
+    //$qt->tabs[] = array();
     $configuration_data = array(
       '#type' => 'table',
       '#header' => array(
@@ -189,25 +229,15 @@ class QuickTabsInstanceEditForm extends EntityForm {
       ),
     );
 
-    $type = \Drupal::service('plugin.manager.tab_type');
-    $plugin_definitions = $type->getDefinitions();
-
-    $types = array();
-    foreach ($plugin_definitions as $index => $def) {
-      $name = $def['name'];
-      $types[$name->render()] = $name->render();
-    }
-
-    ksort($types);
     for ($i=0; $i<count($qt->tabs); $i++) {
       $tab = $qt->tabs[$i];
-      $configuration_data[$i] = $this->getRow($tab);
+      $configuration_data[$i] = $this->getRow($i, $tab);
     }
     
     return $configuration_data;
   }
 
-  private function getRow($tab = NULL) {
+  private function getRow($row_number, $tab = NULL) {
     if ($tab === NULL) {
       $tab = array();
     }
@@ -220,6 +250,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
       $name = $def['name'];
       $types[$name->render()] = $name->render();
     }
+
+    $options = array('op1' => 'option 1', 'op2' => 'option 2');
 
     ksort($types);
     $row = array();
@@ -245,7 +277,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
       
     $row['type'] = array(
-      '#type' => 'radios',
+      '#type' => 'select',
       '#options' => $types,
       '#default_value' => isset($tab['type']) ? $tab['type'] : key($types),
     );
@@ -264,7 +296,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#type' => 'submit',
       '#prefix' => '<div>',
       '#suffix' => '<label for="edit-remove">' . t('Delete') . '</label></div>',
-      '#value' => 'remove_' . $delta,
+      '#value' => 'remove_' . $row_number,
       '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
       '#submit' => array('quicktabs_remove_tab_submit'),
       '#ajax' => array(
