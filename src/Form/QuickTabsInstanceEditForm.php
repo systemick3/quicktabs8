@@ -156,6 +156,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
       ),
     );
 
+    $form['#attached']['library'][] = 'quicktabs/quicktabs.form';
+
     return $form;
   }
 
@@ -296,7 +298,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     foreach ($plugin_definitions as $index => $def) {
       $name = $def['name'];
       $row['content'][$name->render()] = array(
-        '#prefix' => '<div class="' . $name . '-plugin-content plugin-content">',
+        '#prefix' => '<div class="' . $name . '-plugin-content plugin-content qt-tab-options-form qt-tab-' . $name . '-options-form" >',
         '#suffix' =>'</div>',
       );
       $object = $type->createInstance($index);
