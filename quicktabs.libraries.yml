@@ -1,0 +1,4 @@
+quicktabs.form:
+  version: VERSION
+  js:
+    js/quicktabs_form.js: {}
