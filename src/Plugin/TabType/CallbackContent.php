@@ -22,6 +22,13 @@ class CallbackContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    return array();
+    $form = array();
+    $form['callback']['path'] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($tab['path']) ? $tab['path'] : '',
+      '#title' => t('Path'),
+      '#element_validate' => array('quicktabs_callback_element_validate'),
+    );
+    return $form;
   }
 }
