@@ -244,6 +244,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
 
     foreach ($qt->tabs as $index => $tab) {
+      $tab['entity_id'] = $this->entity->id();
       $configuration_data[$index] = $this->getRow($index, $tab);
     }
     
