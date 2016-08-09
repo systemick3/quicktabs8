@@ -13,6 +13,8 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\quicktabs\Plugin\TabType\ViewContent;
 
 /**
  * Class QuickTabsInstanceEditForm
@@ -171,6 +173,31 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
     return $ajax_response;
   }
+  
+  /**
+   * Ajax callback for the add tab and remove tab buttons.
+   * TODO: Figure out how to get this working in the plugin - possibly a generic function
+   */
+  public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
+    $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
+    $element_id = '#view-display-dropdown-' . $tab_index;
+    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view']['options']['vid'];
+    $wrapper = '<div id="view-display-dropdown-' . $tab_index . '">';
+    $form['display'] = array(
+      '#type' => 'select',
+      '#title' => 'display',
+      '#options' => ViewContent::getViewDisplays($selected_view),
+      '#prefix' => $wrapper,
+      '#suffix' => '</div>'
+    );
+
+    $form_state->setRebuild(TRUE);
+    $ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['display']));
+
+    return $ajax_response;
+
+  }
 
   /**
    * Submit handler for the 'Add Tab' and 'Remove' buttons.
@@ -245,6 +272,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
     foreach ($qt->tabs as $index => $tab) {
       $tab['entity_id'] = $this->entity->id();
+      $tab['delta'] = $index;
       $configuration_data[$index] = $this->getRow($index, $tab);
     }
     
