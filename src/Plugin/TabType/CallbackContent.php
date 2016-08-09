@@ -22,7 +22,7 @@ class CallbackContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  $this->getPluginDefinition()['name'];
+    $plugin_name =  trim($this->getPluginDefinition()['name']);
     $form = array();
     $form['path'] = array(
       '#type' => 'textfield',

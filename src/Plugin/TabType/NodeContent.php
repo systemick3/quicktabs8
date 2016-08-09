@@ -22,7 +22,8 @@ class NodeContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  $this->getPluginDefinition()['name'];
+    $plugin_name =  trim($this->getPluginDefinition()['name']);
+
     $form = array();
     $form['nid'] = array(
       '#type' => 'textfield',

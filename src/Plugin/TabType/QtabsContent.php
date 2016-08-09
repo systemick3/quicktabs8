@@ -22,7 +22,7 @@ class QtabsContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  $this->getPluginDefinition()['name'];
+    $plugin_name =  trim($this->getPluginDefinition()['name']);
     $form = array();
     $tab_options = array();
     foreach (\Drupal::entityTypeManager()->getStorage('quicktabs_instance')->loadMultiple() as $machine_name => $entity) {
