@@ -6,7 +6,8 @@
  */
 
 namespace Drupal\quicktabs\Plugin\Block;
-use Drupal\block\BlockBase;
+
+use Drupal\Core\Block\BlockBase;
 
 /**
  * Provides a 'QuickTabs' block.
@@ -27,6 +28,13 @@ class QuickTabsBlock extends BlockBase {
   public function build() {
     $build = array();
     $block_id = $this->getDerivativeId();
+    $build['#markup'] = 'Hello World';
+    
+    $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
+    //print '<pre>';
+    //print_r($qt);
+    //die(__FILE__ . $block_id);
+
     return $build;
   }
 }
