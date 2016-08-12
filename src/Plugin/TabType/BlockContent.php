@@ -22,7 +22,6 @@ class BlockContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  //public function optionsForm($delta, $qt) {
   public function optionsForm($tab) {
     $plugin_name =  $this->getPluginDefinition()['name'];
     $form = array();
@@ -41,16 +40,17 @@ class BlockContent extends TabTypeBase {
   }
 
   private function getBlockOptions() {
-    $config = \Drupal::config('system.theme');
-    $default_theme = $config->get('default');
-    $block_storage = \Drupal::entityManager()->getStorage('block');
-    $entities = $block_storage->loadMultiple();
+    $block_manager = \Drupal::service('plugin.manager.block');
+    $context_repository = \Drupal::service('context.repository');
+
+    // Only add blocks which work without any available context.
+    $definitions = $block_manager->getDefinitionsForContexts($context_repository->getAvailableContexts());
+    // Order by category, and then by admin label.
+    $definitions = $block_manager->getSortedDefinitions($definitions);
+
     $blocks = [];
-    foreach ($entities as $entity_id => $entity) {
-      if ($entity->getTheme() === $default_theme) {
-        $definition = $entity->getPlugin()->getPluginDefinition();
-        $blocks[$entity_id] = $entity->label() . ' (' . $definition['category'] . ')';
-      }
+    foreach ($definitions as $block_id => $definition) {
+      $blocks[$block_id] = $definition['admin_label'] . ' (' . $definition['provider'] . ')';
     }
     
     return $blocks;
