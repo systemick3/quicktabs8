@@ -138,7 +138,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
     $form['configuration_data_wrapper']['configuration_data'] = $this->getConfigurationDataForm($qt);
 
-    $form['configuration_data_wrapper']['tabs_more'] = array(
+    $form['tabs_more'] = array(
       '#name' => 'tabs_more',
       '#type' => 'submit',
       '#value' => t('Add tab'),
