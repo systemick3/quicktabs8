@@ -290,7 +290,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     $types = array();
     foreach ($plugin_definitions as $index => $def) {
       $name = $def['name'];
-      $types[$name->render()] = $name->render();
+      $types[$index] = $name->render();
     }
 
     $options = array('op1' => 'option 1', 'op2' => 'option 2');
@@ -326,12 +326,12 @@ class QuickTabsInstanceEditForm extends EntityForm {
       
     foreach ($plugin_definitions as $index => $def) {
       $name = $def['name'];
-      $row['content'][$name->render()] = array(
-        '#prefix' => '<div class="' . $name . '-plugin-content plugin-content qt-tab-options-form qt-tab-' . $name . '-options-form" >',
+      $row['content'][$index] = array(
+        '#prefix' => '<div class="' . $index . '-plugin-content plugin-content qt-tab-options-form qt-tab-' . $index . '-options-form" >',
         '#suffix' =>'</div>',
       );
       $object = $type->createInstance($index);
-      $row['content'][$name->render()]['options'] = $object->optionsForm($tab);
+      $row['content'][$index]['options'] = $object->optionsForm($tab);
     }
 
     $row['operations'] = array(

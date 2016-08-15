@@ -22,7 +22,7 @@ class QtabsContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  trim($this->getPluginDefinition()['name']);
+    $plugin_id = $this->getPluginDefinition()['id'];
     $form = array();
     $tab_options = array();
     foreach (\Drupal::entityTypeManager()->getStorage('quicktabs_instance')->loadMultiple() as $machine_name => $entity) {
@@ -36,8 +36,15 @@ class QtabsContent extends TabTypeBase {
       '#title' => t('Quicktabs instance'),
       '#description' => t('The Quicktabs instance to put inside this tab.'),
       '#options' => $tab_options,
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['machine_name']) ? $tab['content'][$plugin_name]['options']['machine_name'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['machine_name']) ? $tab['content'][$plugin_id]['options']['machine_name'] : '',
     );
     return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function render(array $options) {
+    return array('#markup' => 'Qtabs content');
   }
 }

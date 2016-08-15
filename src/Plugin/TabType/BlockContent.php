@@ -23,20 +23,27 @@ class BlockContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  $this->getPluginDefinition()['name'];
+    $plugin_id = $this->getPluginDefinition()['id'];
     $form = array();
     $form['bid'] = array(
       '#type' => 'select',
       '#options' => $this->getBlockOptions(),
-      '#default_value' => isset($tab['content'][$plugin_name->render()]['options']['bid']) ? $tab['content'][$plugin_name->render()]['options']['bid'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['bid']) ? $tab['content'][$plugin_id]['options']['bid'] : '',
       '#title' => t('Select a block'),
     );
     $form['hide_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Hide the title of this block'),
-      '#default_value' => isset($tab['content'][$plugin_name->render()]['options']['hide_title']) ? $tab['content'][$plugin_name->render()]['options']['hide_title'] : 0,
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['hide_title']) ? $tab['content'][$plugin_id]['options']['hide_title'] : 0,
     );
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render(array $options) {
+    return array('#markup' => 'Block content');
   }
 
   private function getBlockOptions() {

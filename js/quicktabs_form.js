@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
 
-  'user strict';
+  'use strict';
 
   /**
    * Shows/hides options forms for various QT plugins.
