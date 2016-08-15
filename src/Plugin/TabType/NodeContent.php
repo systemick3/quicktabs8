@@ -22,7 +22,7 @@ class NodeContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  trim($this->getPluginDefinition()['name']);
+    $plugin_id = $this->getPluginDefinition()['id'];
 
     $form = array();
     $form['nid'] = array(
@@ -31,7 +31,7 @@ class NodeContent extends TabTypeBase {
       '#description' => t('The node ID of the node.'),
       '#maxlength' => 10,
       '#size' => 20,
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['nid']) ? $tab['content'][$plugin_name]['options']['nid'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['nid']) ? $tab['content'][$plugin_id]['options']['nid'] : '',
     );
     $view_modes = \Drupal::entityManager()->getViewModes('node');
     $options = array();
@@ -42,13 +42,20 @@ class NodeContent extends TabTypeBase {
       '#type' => 'select',
       '#title' => t('View mode'),
       '#options' => $options,
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['view_mode']) ? $tab['content'][$plugin_name]['options']['view_mode'] : 'full',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['view_mode']) ? $tab['content'][$plugin_id]['options']['view_mode'] : 'full',
      );
      $form['hide_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Hide the title of this node'),
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['hide_title']) ? $tab['content'][$plugin_name]['options']['hide_title'] : 1,
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['hide_title']) ? $tab['content'][$plugin_id]['options']['hide_title'] : 1,
     );
     return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function render(array $options) {
+    return array('#markup' => 'Node content');
   }
 }

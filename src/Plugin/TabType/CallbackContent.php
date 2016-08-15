@@ -22,14 +22,21 @@ class CallbackContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  trim($this->getPluginDefinition()['name']);
+    $plugin_id = $this->getPluginDefinition()['id'];
     $form = array();
     $form['path'] = array(
       '#type' => 'textfield',
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['path']) ? $tab['content'][$plugin_name]['options']['path'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['path']) ? $tab['content'][$plugin_id]['options']['path'] : '',
       '#title' => t('Path'),
       '#element_validate' => array('quicktabs_callback_element_validate'),
     );
     return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function render(array $options) {
+    return array('#markup' => 'Calbback content');
   }
 }

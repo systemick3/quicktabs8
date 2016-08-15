@@ -23,10 +23,10 @@ class ViewContent extends TabTypeBase {
    * {@inheritdoc}
    */
   public function optionsForm($tab) {
-    $plugin_name =  trim($this->getPluginDefinition()['name']);
+    $plugin_id = $this->getPluginDefinition()['id'];
     $views = $this->getViews();
     $views_keys = array_keys($views);
-    $selected_view = (isset($tab['content'][$plugin_name]['options']['vid']) ? $tab['content'][$plugin_name]['options']['vid'] : (isset($views_keys[0]) ? $views_keys[0] : ''));
+    $selected_view = (isset($tab['content'][$plugin_id]['options']['vid']) ? $tab['content'][$plugin_id]['options']['vid'] : (isset($views_keys[0]) ? $views_keys[0] : ''));
 
     $form = array();
     $form['vid'] = array(
@@ -48,7 +48,7 @@ class ViewContent extends TabTypeBase {
       '#type' => 'select',
       '#title' => 'display',
       '#options' => ViewContent::getViewDisplays($selected_view),
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['display']) ? $tab['content'][$plugin_name]['options']['display'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['display']) ? $tab['content'][$plugin_id]['options']['display'] : '',
       '#prefix' => '<div id="view-display-dropdown-' . $tab['delta'] . '">',
       '#suffix' => '</div>'
     );
@@ -57,11 +57,18 @@ class ViewContent extends TabTypeBase {
       '#title' => 'arguments',
       '#size' => '40',
       '#required' => FALSE,
-      '#default_value' => isset($tab['content'][$plugin_name]['options']['args']) ? $tab['content'][$plugin_name]['options']['args'] : '',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['args']) ? $tab['content'][$plugin_id]['options']['args'] : '',
       '#description' => t('Additional arguments to send to the view as if they were part of the URL in the form of arg1/arg2/arg3. You may use %0, %1, ..., %N to grab arguments from the URL.'),
     );
     
     return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function render(array $options) {
+    return array('#markup' => 'View content');
   }
 
   /**

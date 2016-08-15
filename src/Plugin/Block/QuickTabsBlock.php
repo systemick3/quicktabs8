@@ -28,13 +28,15 @@ class QuickTabsBlock extends BlockBase {
   public function build() {
     $build = array();
     $block_id = $this->getDerivativeId();
-    $build['#markup'] = 'Hello World';
     
+    $type = \Drupal::service('plugin.manager.tab_type');
+    $plugin_definitions = $type->getDefinitions();
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
-    //print '<pre>';
-    //print_r($qt);
-    //die(__FILE__ . $block_id);
-
+    foreach ($qt->getConfigurationData() as $index => $tab) {
+      $object = $type->createInstance($tab['type']);
+      $build[$index] = $object->render($tab['content'][$tab['type']]['options']);
+    }
+    
     return $build;
   }
 }
