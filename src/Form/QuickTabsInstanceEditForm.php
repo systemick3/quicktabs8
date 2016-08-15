@@ -181,7 +181,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
   public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
     $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
     $element_id = '#view-display-dropdown-' . $tab_index;
-    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view']['options']['vid'];
+    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view_content']['options']['vid'];
     $wrapper = '<div id="view-display-dropdown-' . $tab_index . '">';
     $form['display'] = array(
       '#type' => 'select',
