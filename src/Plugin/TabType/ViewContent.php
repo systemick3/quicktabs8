@@ -39,7 +39,7 @@ class ViewContent extends TabTypeBase {
         'event' => 'change',
         'progress' => array(
           'type' => 'throbber',
-          'message' => 'Hello Mike',
+          'message' => 'Please wait...',
         ), 
         'effect' => 'fade',
       ),
