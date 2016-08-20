@@ -1,3 +1,9 @@
+quicktabs:
+  version: VERSION
+  css:
+    theme:
+      css/quicktabs.css: {}
+
 quicktabs.form:
   version: VERSION
   js:
