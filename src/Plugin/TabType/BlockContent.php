@@ -42,7 +42,8 @@ class BlockContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function render(array $options) {
+  public function render(array $tab) {
+    $options = $tab['content'][$tab['type']]['options'];
     if (strpos($options['bid'], 'block_content') !== FALSE) {
       $parts = explode(':', $options['bid']);
       $entity_manager = \Drupal::service('entity.manager');
@@ -66,6 +67,16 @@ class BlockContent extends TabTypeBase {
 
       $render = $plugin_block->build();
     }
+
+    $render['#theme_wrappers'] = array(
+      'container' => array(
+        '#attributes' => array(
+          'class' => array('quicktabs-tabpage'),
+          'id' => 'quicktabs-tabpage-quicktabs-' . $tab['tab_page'] ,
+        ),
+      ),
+    );
+
     return $render;
   }
 

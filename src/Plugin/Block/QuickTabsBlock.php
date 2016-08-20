@@ -36,17 +36,18 @@ class QuickTabsBlock extends BlockBase {
     $plugin_definitions = $type->getDefinitions();
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
     $current_path = \Drupal::service('path.current')->getPath();
-    $tab_number = 0;
+    $tab_page = 0;
     foreach ($qt->getConfigurationData() as $index => $tab) {
+      $tab['tab_page'] = $tab_page;
       $options = array(
-        'query' => array('qt-quicktabs' => $tab_number),
+        'query' => array('qt-quicktabs' => $tab_page),
         'fragment' => 'qt-quicktabs',
-        'attributes' => array('id' => 'quicktabs-tab-quicktabs-' . $tab_number),
+        'attributes' => array('id' => 'quicktabs-tab-quicktabs-' . $tab_page),
       );
       $titles[] = Link::fromTextAndUrl($tab['title'], Url::fromUri('internal:' . $current_path, $options));
       $object = $type->createInstance($tab['type']);
-      $build[$index] = $object->render($tab['content'][$tab['type']]['options']);
-      $tab_number++;
+      $build[$index] = $object->render($tab);
+      $tab_page++;
     }
 
     $tabs = array(
@@ -61,6 +62,15 @@ class QuickTabsBlock extends BlockBase {
   
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs'),
+    );
+
+    $build['#theme_wrappers'] = array(
+      'container' => array(
+        '#attributes' => array(
+          'class' => array('quicktabs-wrapper'),
+          'id' => 'quicktabs-quicktabs',
+        ),
+      ),
     );
     
     return $build;
