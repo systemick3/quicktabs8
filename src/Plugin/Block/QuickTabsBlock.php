@@ -10,6 +10,7 @@ namespace Drupal\quicktabs\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 Use Drupal\Core\Url;
 Use Drupal\Core\Link;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Provides a 'QuickTabs' block.
@@ -57,10 +58,16 @@ class QuickTabsBlock extends BlockBase {
       $titles[] = Link::fromTextAndUrl($tab['title'], Url::fromUri('internal:' . $current_path, $options));
       $object = $type->createInstance($tab['type']);
       $render = $object->render($tab);
+      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-quicktabs-' . $tab_page));
+      $classes = array('quicktabs-tabpage');
 
       if ($qt->getDefaultTab() != $tab_page) {
-        $render['#theme_wrappers']['container']['#attributes']['class'][] = 'quicktabs-hide';
+        $classes[] = 'quicktabs-hide';
       }
+
+      $attributes['class'] = $classes;
+      $render['#prefix'] = '<div ' . $attributes . '>';
+      $render['#suffix'] = '</div>';
 
       $build['pages'][$index] = $render;
       $tab_pages[] = $tab;
