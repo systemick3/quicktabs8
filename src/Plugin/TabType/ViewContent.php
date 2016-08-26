@@ -67,8 +67,13 @@ class ViewContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function render(array $options) {
-    return array('#markup' => 'View content');
+  public function render(array $tab) {
+    $options = $tab['content'][$tab['type']]['options'];
+    $args = empty($options['args']) ? array() : array_map('trim', explode(',', $options['args']));
+    $view = Views::getView($options['vid']);
+    $render = $view->buildRenderable($options['display'], $args);
+
+    return $render;
   }
 
   /**

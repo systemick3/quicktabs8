@@ -68,15 +68,6 @@ class BlockContent extends TabTypeBase {
       $render = $plugin_block->build();
     }
 
-    $render['#theme_wrappers'] = array(
-      'container' => array(
-        '#attributes' => array(
-          'class' => array('quicktabs-tabpage'),
-          'id' => 'quicktabs-tabpage-quicktabs-' . $tab['tab_page'] ,
-        ),
-      ),
-    );
-
     return $render;
   }
 
