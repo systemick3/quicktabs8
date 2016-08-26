@@ -29,6 +29,15 @@ class QuickTabsBlock extends BlockBase {
    */
   public function build() {
     $build = array();
+    $build['pages'] = array();
+    $build['pages']['#theme_wrappers'] = array(
+      'container' => array(
+        '#attributes' => array(
+          'class' => array('quicktabs-main'),
+          'id' => 'quicktabs-container-quicktabs',
+        ),
+      ),
+    );
     $titles = array();
     $block_id = $this->getDerivativeId();
     
@@ -37,6 +46,7 @@ class QuickTabsBlock extends BlockBase {
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
     $current_path = \Drupal::service('path.current')->getPath();
     $tab_page = 0;
+    $tab_pages = array();
     foreach ($qt->getConfigurationData() as $index => $tab) {
       $tab['tab_page'] = $tab_page;
       $options = array(
@@ -46,7 +56,14 @@ class QuickTabsBlock extends BlockBase {
       );
       $titles[] = Link::fromTextAndUrl($tab['title'], Url::fromUri('internal:' . $current_path, $options));
       $object = $type->createInstance($tab['type']);
-      $build[$index] = $object->render($tab);
+      $render = $object->render($tab);
+
+      if ($qt->getDefaultTab() != $tab_page) {
+        $render['#theme_wrappers']['container']['#attributes']['class'][] = 'quicktabs-hide';
+      }
+
+      $build['pages'][$index] = $render;
+      $tab_pages[] = $tab;
       $tab_page++;
     }
 
@@ -62,6 +79,13 @@ class QuickTabsBlock extends BlockBase {
   
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs'),
+      'drupalSettings' => array(
+        'quicktabs' => array(
+          'qt_quicktabs' => array(
+            'tabs' => $tab_pages,
+          ),
+        ),
+      ),
     );
 
     $build['#theme_wrappers'] = array(
