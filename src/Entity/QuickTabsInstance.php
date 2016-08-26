@@ -45,6 +45,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "style" = "style",
  *     "ajax" = "ajax",
  *     "hide_empty_tabs" = "hide_empty_tabs",
+ *     "default_tab" = "default_tab",
  *     "configuration_data" = "configuration_data"
  *   },
  *   admin_permission = "administer quicktabs",
@@ -95,6 +96,13 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
   protected $hide_empty_tabs;
 
   /**
+   * whether or not to hide empty tabs.
+   *
+   * @var bool
+   */
+  protected $default_tab;
+
+  /**
    * required to render this instance.
    *
    * @var array
@@ -136,6 +144,13 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
     return $this->hide_empty_tabs;
   }
   
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultTab() {
+    return isset($this->default_tab) ? $this->default_tab : 0;
+  }
+
   /**
    * {@inheritdoc}
    */

@@ -22,6 +22,8 @@ use Drupal\quicktabs\Plugin\TabType\ViewContent;
  */
 class QuickTabsInstanceEditForm extends EntityForm {
 
+  const QUICKTABS_DELTA_NONE = '9999';
+
   /**
    * {@inheritdoc}
    */
@@ -99,7 +101,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#title' => $this->t('Hide empty tabs'),
       '#default_value' => $this->entity->getHideEmptyTabs(),
       '#description' => $this->t('Empty and restricted tabs will not be displayed. Could be useful when the tab content is not accessible.<br />This option does not work in ajax mode.'),
-      '#weight' => -4,
+      '#weight' => -3,
     );
 
     $qt = new \stdClass;
@@ -109,6 +111,27 @@ class QuickTabsInstanceEditForm extends EntityForm {
     else {
       $qt->tabs = $this->entity->getConfigurationData();
     }
+
+    $tab_titles = array(
+      QuickTabsInstanceEditForm::QUICKTABS_DELTA_NONE => t('- None -'),
+    );
+
+    $delta = 0;
+    if (!empty($qt->tabs)) {
+      foreach ($qt->tabs as $tab) {
+        $tab_titles[$delta] = $tab['title'];
+        $delta++;
+      }
+    }
+
+    $form['default_tab'] = array(
+      '#type' => 'select',
+      '#title' => t('Default tab'),
+      '#options' => $tab_titles,
+      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
+      '#access' => !empty($tab_titles),
+      '#weight' => -4,
+    );
 
     // Show 2 empty tabs when adding a new QT instance
     if (empty($qt->tabs)) {

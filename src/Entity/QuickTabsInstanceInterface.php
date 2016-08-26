@@ -16,6 +16,7 @@ interface QuickTabsInstanceInterface extends ConfigEntityInterface {
   public function getStyle();
   public function isAjax();
   public function getHideEmptyTabs();
+  public function getDefaultTab();
 }
 
 ?>
