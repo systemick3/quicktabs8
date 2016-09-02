@@ -31,9 +31,7 @@ Drupal.quicktabs.prepare = function(el) {
     element.qt_name = qt_name;
     var tab = new Drupal.quicktabs.tab(element);
     var parent_li = $(element).parents('li').get(0);
-    if ($(parent_li).hasClass('active')) {
-      $(element).addClass('quicktabs-loaded');
-    }
+
     $(element).bind('click', {tab: tab}, Drupal.quicktabs.clickHandler);
   });
 }
@@ -44,6 +42,14 @@ Drupal.quicktabs.clickHandler = function(event) {
   // Set clicked tab to active.
   $(this).parents('li').siblings().removeClass('active');
   $(this).parents('li').addClass('active');
+
+  // TODO: Below isn't working
+  if ($(this).hasClass('use-ajax')) {
+    $(this).removeClass('use-ajax');
+  }
+
+  Drupal.attachBehaviors($(this));
+  ////////////////////////////////
 
   // Hide all tabpages.
   tab.container.children().addClass('quicktabs-hide');
