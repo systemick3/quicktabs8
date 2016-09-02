@@ -7,25 +7,30 @@
 namespace Drupal\quicktabs\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 
 class QuickTabsController extends ControllerBase {
 
   /**
    * {@inheritdoc}
    */
-  public function content() {
-    return array(
-      //'#theme' => 'tagadelic_taxonomy_cloud',
-      //'#tags' => $this->tags,
-      //'#attached' => array(
-        //'library' =>  array(
-          //'tagadelic/base'
-        //),
-      //),
-      //'#markup' => $this->t('Each Quicktabs instance has a corresponding block that is managed on the <a href="!blocks">blocks administration page</a>.', array('!blocks' => \Drupal::Url('block.admin_display'))),
-      //'#markup' => $this->t('Each Quicktabs instance has a corresponding block that is managed on the '),
-      //'#weight' => 1,
-    );
+  public function ajaxContent($js, $instance, $tab) {
+    if ($js === 'nojs') {
+      return array();
+    }
+    else {
+      $type = \Drupal::service('plugin.manager.tab_type');
+      $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($instance);
+      $configuration_data = $qt->getConfigurationData();
+      $object = $type->createInstance($configuration_data[$tab]['type']);
+      $render = $object->render($configuration_data[$tab]);
+
+      $element_id = '#quicktabs-tabpage-' . $instance . '-' . $tab;
+      $ajax_response = new AjaxResponse();
+      $ajax_response->addCommand(new HtmlCommand($element_id, $render));
+      return $ajax_response;
+    } 
   }
 }
 ?>

@@ -7,6 +7,12 @@ quicktabs.admin:
     _permission: 'administer quicktabs'
   options:
     _admin_route: TRUE
+quicktabs.ajax_content:
+  path: '/quicktabs/{js}/{instance}/{tab}'
+  defaults:
+    _controller: '\Drupal\quicktabs\Controller\QuickTabsController::ajaxContent'
+  requirements:
+    _permission: 'access content'
 entity.quicktabs_instance.add:
   path: '/admin/structure/quicktabs/add'
   defaults:

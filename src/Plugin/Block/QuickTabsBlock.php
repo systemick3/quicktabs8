@@ -31,6 +31,10 @@ class QuickTabsBlock extends BlockBase {
   public function build() {
     $block_id = $this->getDerivativeId();
     
+    $type = \Drupal::service('plugin.manager.tab_type');
+    $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
+
+    // The render array used to build the block
     $build = array();
     $build['pages'] = array();
     $build['pages']['#theme_wrappers'] = array(
@@ -41,16 +45,43 @@ class QuickTabsBlock extends BlockBase {
         ),
       ),
     );
-    
-    $type = \Drupal::service('plugin.manager.tab_type');
-    $plugin_definitions = $type->getDefinitions();
-    $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
-    $current_path = \Drupal::service('path.current')->getPath();
+
+    // Pages of content that will be shown or hidden
     $tab_pages = array();
+
+    // Tabs used to show/hide content
     $titles = array();
 
     foreach ($qt->getConfigurationData() as $index => $tab) {
-      $tab['tab_page'] = $index;
+      // Build the pages //////////////////////////////////////
+      if ($qt->isAjax()) {
+        if ($qt->getDefaultTab() == $index) {
+          $object = $type->createInstance($tab['type']);
+          $render = $object->render($tab);
+        }
+        else {
+          $render = array('#markup' => 'Content goes here');
+        }
+      }
+      else {
+        $object = $type->createInstance($tab['type']);
+        $render = $object->render($tab);
+      }
+
+      $classes = array('quicktabs-tabpage');
+
+      if ($qt->getDefaultTab() != $index) {
+        $classes[] = 'quicktabs-hide';
+      }
+
+      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $block_id . '-' . $index));
+      $attributes['class'] = $classes;
+      $render['#prefix'] = '<div ' . $attributes . '>';
+      $render['#suffix'] = '</div>';
+
+      $build['pages'][$index] = $render;
+
+      // Build the tabs ///////////////////////////////
       $options = array(
         'query' => array('qt-quicktabs' => $index),
         'fragment' => 'qt-quicktabs',
@@ -60,25 +91,42 @@ class QuickTabsBlock extends BlockBase {
       if ($qt->getDefaultTab() == $index) {
         $wrapper_attributes['class'] = array('active');
       }
+
+      $link_classes = array();
+      if ($qt->isAjax()) {
+        if ($qt->getDefaultTab() == $index) {
+          $link_classes[] = 'quicktabs-loaded';
+        }
+        else {
+          $link_classes[] = 'use-ajax';
+        }
+      }
+      else {
+        $link_classes[] = 'quicktabs-loaded';
+      }
+
       $titles[] = array(
-        '0' => Link::fromTextAndUrl($tab['title'], Url::fromRoute('quicktabs.ajax_content', array('js' => 'nojs', 'instance' => $block_id, 'tab' => $index)))->toRenderable(),
+        '0' => Link::fromTextAndUrl(
+          $tab['title'],
+          Url::fromRoute(
+            'quicktabs.ajax_content',
+            array(
+              'js' => 'nojs',
+              'instance' => $block_id,
+              'tab' => $index
+            ),
+            array(
+              'attributes' => array(
+                'class' => $link_classes,
+              ),
+            )
+          )
+        )->toRenderable(),
         '#wrapper_attributes' => $wrapper_attributes,
       );
 
-      $object = $type->createInstance($tab['type']);
-      $render = $object->render($tab);
-      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $block_id . '-' . $index));
-      $classes = array('quicktabs-tabpage');
-
-      if ($qt->getDefaultTab() != $index) {
-        $classes[] = 'quicktabs-hide';
-      }
-
-      $attributes['class'] = $classes;
-      $render['#prefix'] = '<div ' . $attributes . '>';
-      $render['#suffix'] = '</div>';
-
-      $build['pages'][$index] = $render;
+      // Array of tab pages to pass as settings ////////////
+      $tab['tab_page'] = $index;
       $tab_pages[] = $tab;
     }
 
@@ -90,8 +138,10 @@ class QuickTabsBlock extends BlockBase {
       ),
     );
     
+    // Add tabs to the build
     array_unshift($build, $tabs);
   
+    // Attach js
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs'),
       'drupalSettings' => array(
@@ -103,6 +153,7 @@ class QuickTabsBlock extends BlockBase {
       ),
     );
 
+    // Add a wrapper
     $build['#theme_wrappers'] = array(
       'container' => array(
         '#attributes' => array(
