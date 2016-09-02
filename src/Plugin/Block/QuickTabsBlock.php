@@ -29,18 +29,19 @@ class QuickTabsBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $titles = array();
+    $block_id = $this->getDerivativeId();
+    
     $build = array();
     $build['pages'] = array();
     $build['pages']['#theme_wrappers'] = array(
       'container' => array(
         '#attributes' => array(
           'class' => array('quicktabs-main'),
-          'id' => 'quicktabs-container-quicktabs',
+          'id' => 'quicktabs-container-' . $block_id,
         ),
       ),
     );
-    $titles = array();
-    $block_id = $this->getDerivativeId();
     
     $type = \Drupal::service('plugin.manager.tab_type');
     $plugin_definitions = $type->getDefinitions();
@@ -53,12 +54,12 @@ class QuickTabsBlock extends BlockBase {
       $options = array(
         'query' => array('qt-quicktabs' => $tab_page),
         'fragment' => 'qt-quicktabs',
-        'attributes' => array('id' => 'quicktabs-tab-quicktabs-' . $tab_page),
+        'attributes' => array('id' => 'quicktabs-tab-' . $block_id . '-' . $tab_page),
       );
       $titles[] = Link::fromTextAndUrl($tab['title'], Url::fromUri('internal:' . $current_path, $options));
       $object = $type->createInstance($tab['type']);
       $render = $object->render($tab);
-      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-quicktabs-' . $tab_page));
+      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $block_id . '-' . $tab_page));
       $classes = array('quicktabs-tabpage');
 
       if ($qt->getDefaultTab() != $tab_page) {
@@ -88,7 +89,7 @@ class QuickTabsBlock extends BlockBase {
       'library' => array('quicktabs/quicktabs'),
       'drupalSettings' => array(
         'quicktabs' => array(
-          'qt_quicktabs' => array(
+          'qt_' . $block_id => array(
             'tabs' => $tab_pages,
           ),
         ),
@@ -99,7 +100,7 @@ class QuickTabsBlock extends BlockBase {
       'container' => array(
         '#attributes' => array(
           'class' => array('quicktabs-wrapper'),
-          'id' => 'quicktabs-quicktabs',
+          'id' => 'quicktabs-' . $block_id,
         ),
       ),
     );
