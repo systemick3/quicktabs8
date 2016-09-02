@@ -29,7 +29,6 @@ class QuickTabsBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $titles = array();
     $block_id = $this->getDerivativeId();
     
     $build = array();
@@ -47,22 +46,31 @@ class QuickTabsBlock extends BlockBase {
     $plugin_definitions = $type->getDefinitions();
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($block_id);
     $current_path = \Drupal::service('path.current')->getPath();
-    $tab_page = 0;
     $tab_pages = array();
+    $titles = array();
+
     foreach ($qt->getConfigurationData() as $index => $tab) {
-      $tab['tab_page'] = $tab_page;
+      $tab['tab_page'] = $index;
       $options = array(
-        'query' => array('qt-quicktabs' => $tab_page),
+        'query' => array('qt-quicktabs' => $index),
         'fragment' => 'qt-quicktabs',
-        'attributes' => array('id' => 'quicktabs-tab-' . $block_id . '-' . $tab_page),
+        'attributes' => array('id' => 'quicktabs-tab-' . $block_id . '-' . $index),
       );
-      $titles[] = Link::fromTextAndUrl($tab['title'], Url::fromUri('internal:' . $current_path, $options));
+      $wrapper_attributes = array();
+      if ($qt->getDefaultTab() == $index) {
+        $wrapper_attributes['class'] = array('active');
+      }
+      $titles[] = array(
+        '0' => Link::fromTextAndUrl($tab['title'], Url::fromRoute('quicktabs.ajax_content', array('js' => 'nojs', 'instance' => $block_id, 'tab' => $index)))->toRenderable(),
+        '#wrapper_attributes' => $wrapper_attributes,
+      );
+
       $object = $type->createInstance($tab['type']);
       $render = $object->render($tab);
-      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $block_id . '-' . $tab_page));
+      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $block_id . '-' . $index));
       $classes = array('quicktabs-tabpage');
 
-      if ($qt->getDefaultTab() != $tab_page) {
+      if ($qt->getDefaultTab() != $index) {
         $classes[] = 'quicktabs-hide';
       }
 
@@ -72,7 +80,6 @@ class QuickTabsBlock extends BlockBase {
 
       $build['pages'][$index] = $render;
       $tab_pages[] = $tab;
-      $tab_page++;
     }
 
     $tabs = array(
