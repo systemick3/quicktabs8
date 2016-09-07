@@ -94,11 +94,10 @@ class QuickTabsBlock extends BlockBase {
 
       $link_classes = array();
       if ($qt->isAjax()) {
+        $link_classes[] = 'use-ajax';
+        
         if ($qt->getDefaultTab() == $index) {
           $link_classes[] = 'quicktabs-loaded';
-        }
-        else {
-          $link_classes[] = 'use-ajax';
         }
       }
       else {
