@@ -203,7 +203,7 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
           $render = $object->render($tab);
         }
         else {
-          $render = array('#markup' => 'Content goes here');
+          $render = array('#markup' => 'Loading content ...');
         }
       }
       else {
