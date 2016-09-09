@@ -55,7 +55,11 @@ class NodeContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function render(array $options) {
-    return array('#markup' => 'Node content');
+  public function render(array $tab) {
+    $options = $tab['content'][$tab['type']]['options'];
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($options['nid']);
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, $options['view_mode']);
+
+    return $build;
   }
 }
