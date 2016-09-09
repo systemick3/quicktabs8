@@ -44,7 +44,10 @@ class QtabsContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function render(array $options) {
-    return array('#markup' => 'Qtabs content');
+  public function render(array $tab) {
+    $options = $tab['content'][$tab['type']]['options'];
+    $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($options['machine_name']);
+
+    return $qt->getRenderArray();
   }
 }
