@@ -61,14 +61,11 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -8,
     );
 
+
     $form['renderer'] = array(
       '#type' => 'select',
       '#title' => $this->t('Renderer'),
-      '#options' => array(
-        'accordian',
-        'quicktabs',
-        'ui_tabs'
-      ),
+      '#options' => $this->getTabOptions(),
       '#default_value' => $this->entity->getRenderer(),
       '#description' => $this->t('Choose how to render the content.'),
       '#weight' => -7,
@@ -83,17 +80,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       ),
       '#default_value' => ($this->entity->isAjax() !== NULL) ? $this->entity->isAjax() : 0,
       '#description' => $this->t('Choose how the content of tabs should be loaded.<p>By choosing "Yes", only the first tab will be loaded when the page first viewed. Content for other tabs will be loaded only when the user clicks the other tab. This will provide faster initial page loading, but subsequent tab clicks will be slower. This can place less load on a server.</p><p>By choosing "No", all tabs will be loaded when the page is first viewed. This will provide slower initial page loading, and more server load, but subsequent tab clicks will be faster for the user. Use with care if you have heavy views.</p><p>Warning: if you enable Ajax, any block you add to this quicktabs block will be accessible to anonymous users, even if you place role restrictions on the quicktabs block. Do not enable Ajax if the quicktabs block includes any blocks with potentially sensitive information.</p>'),
-      //'#states' => array('visible' => array(':input[name="renderer"]' => array('value' => 'quicktabs'))),
       '#weight' => -6,
-    );
-
-    $form['style'] = array(
-      '#type' => 'select',
-      '#title' => $this->t('Style'),
-      '#options' => array('none', 'option1', 'option2',),
-      '#weight' => -5,
-      '#default_value' => $this->entity->getStyle(),
-      '#description' => $this->t('<p>Yet to be implemented</p>'),
     );
 
     $form['hide_empty_tabs'] = array(
@@ -382,5 +369,17 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
 
     return $row;
+  }
+
+  private function getTabOptions() {
+    $type = \Drupal::service('plugin.manager.tab_renderer');
+    $plugin_definitions = $type->getDefinitions();
+    $options = [];
+
+    foreach ($plugin_definitions as $index => $def) {
+      $options[$index] = $def['name']->__toString();
+    }
+
+    return $options;
   }
 }
