@@ -61,27 +61,35 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -8,
     );
 
+    $type = \Drupal::service('plugin.manager.tab_renderer');
+    $plugin_definitions = $type->getDefinitions();
+    $renderers = [];
+    $renderer_form_options = [];
+
+    foreach ($plugin_definitions as $index => $def) {
+      $renderers[$index] = $def['name']->__toString();
+      $object = $type->createInstance($index);
+      $renderer_form_options[$index] = $object->optionsForm($this->entity);
+    }
 
     $form['renderer'] = array(
       '#type' => 'select',
       '#title' => $this->t('Renderer'),
-      '#options' => $this->getTabOptions(),
+      '#options' => $renderers,
       '#default_value' => $this->entity->getRenderer(),
       '#description' => $this->t('Choose how to render the content.'),
       '#weight' => -7,
     );
 
-    $form['ajax'] = array(
-      '#type' => 'radios',
-      '#title' => t('Ajax'),
-      '#options' => array(
-        TRUE => $this->t('Yes') . ': ' . t('Load only the first tab on page view'),
-        FALSE => $this->t('No') . ': ' . t('Load all tabs on page view.'),
-      ),
-      '#default_value' => ($this->entity->isAjax() !== NULL) ? $this->entity->isAjax() : 0,
-      '#description' => $this->t('Choose how the content of tabs should be loaded.<p>By choosing "Yes", only the first tab will be loaded when the page first viewed. Content for other tabs will be loaded only when the user clicks the other tab. This will provide faster initial page loading, but subsequent tab clicks will be slower. This can place less load on a server.</p><p>By choosing "No", all tabs will be loaded when the page is first viewed. This will provide slower initial page loading, and more server load, but subsequent tab clicks will be faster for the user. Use with care if you have heavy views.</p><p>Warning: if you enable Ajax, any block you add to this quicktabs block will be accessible to anonymous users, even if you place role restrictions on the quicktabs block. Do not enable Ajax if the quicktabs block includes any blocks with potentially sensitive information.</p>'),
-      '#weight' => -6,
-    );
+    // Add the renderer options form elements to the form, to be shown only if the
+    // renderer in question is selected.
+    $form['options'] = array('#tree' => TRUE, '#weight' => -6);
+    foreach ($renderer_form_options as $renderer => $options) {
+      foreach ($options as &$option) {
+        $option['#states'] = array('visible' => array(':input[name="renderer"]' => array('value' => $renderer)));
+      }
+      $form['options'][$renderer] = $options;
+    }
 
     $form['hide_empty_tabs'] = array(
       '#type' => 'checkbox',
@@ -371,7 +379,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     return $row;
   }
 
-  private function getTabOptions() {
+  /*private function getTabOptions() {
     $type = \Drupal::service('plugin.manager.tab_renderer');
     $plugin_definitions = $type->getDefinitions();
     $options = [];
@@ -381,5 +389,5 @@ class QuickTabsInstanceEditForm extends EntityForm {
     }
 
     return $options;
-  }
+  }*/
 }

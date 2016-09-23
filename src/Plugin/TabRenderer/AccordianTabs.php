@@ -22,8 +22,30 @@ class AccordianTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  /*public function optionsForm($tab) {
-  }*/
+  public function optionsForm($tab) {
+    $form = array();
+    $form['history'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'History',
+      '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
+      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['history']) && $qt->options['history']),
+    );
+    $form['jquery_ui'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('JQuery UI options'),
+    );
+    $form['jquery_ui']['autoHeight'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Autoheight',
+      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['jquery_ui']['autoHeight']) && $qt->options['jquery_ui']['autoHeight']),
+    );
+    $form['jquery_ui']['collapsible'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Collapsible'),
+      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['jquery_ui']['collapsible']) && $qt->options['jquery_ui']['collapsible']),
+    );
+    return $form;
+  }
 
   /**
    * {@inheritdoc}

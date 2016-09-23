@@ -47,6 +47,7 @@ use Drupal\Core\Template\Attribute;
  *     "renderer" = "renderer",
  *     "style" = "style",
  *     "ajax" = "ajax",
+ *     "options" = "options",
  *     "hide_empty_tabs" = "hide_empty_tabs",
  *     "default_tab" = "default_tab",
  *     "configuration_data" = "configuration_data"
@@ -83,6 +84,13 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
    * @var string
    */
   protected $style;
+  
+  /**
+   * Options provided by rederer plugins.
+   *
+   * @var bool
+   */
+  protected $options;
 
   /**
    * Whether or not to use ajax.
@@ -131,6 +139,13 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
    */
   public function getStyle() {
     return $this->style;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function getOptions() {
+    return $this->options;
   }
 
   /**
