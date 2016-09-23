@@ -23,8 +23,16 @@ class UiTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  /*public function optionsForm($tab) {
-  }*/
+  public function optionsForm($tab) {
+    $form = array();
+    $form['history'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'History',
+      '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
+      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'ui_tabs' && isset($qt->options['history']) && $qt->options['history']),
+    );
+    return $form;
+  }
 
   /**
    * {@inheritdoc}
