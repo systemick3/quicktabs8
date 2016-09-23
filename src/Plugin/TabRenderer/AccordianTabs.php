@@ -17,7 +17,7 @@ use Drupal\quicktabs\Entity\QuickTabsInstance;
  *   name = @Translation("accordian"),
  * )
  */
-class AccordianTabs extends TabTypeRenderer {
+class AccordianTabs extends TabRendererBase {
   
   /**
    * {@inheritdoc}
@@ -29,33 +29,56 @@ class AccordianTabs extends TabTypeRenderer {
    * {@inheritdoc}
    */
   public function render(QuickTabsInstance $instance) {
-    /*$options = $tab['content'][$tab['type']]['options'];
-    if (strpos($options['bid'], 'block_content') !== FALSE) {
-      $parts = explode(':', $options['bid']);
-      $entity_manager = \Drupal::service('entity.manager');
-      $block = $entity_manager->loadEntityByUuid($parts[0], $parts[1]);
-      $block_content = \Drupal\block_content\Entity\BlockContent::load($block->id());
-      $render = \Drupal::entityManager()->getViewBuilder('block_content')->view($block_content);
+    $qt_id = $instance->id();
+    $type = \Drupal::service('plugin.manager.tab_type');
+
+    // The render array used to build the block
+    $build = array();
+    $build['pages'] = array();
+
+    // Add a wrapper
+    $build['#theme_wrappers'] = array(
+      'container' => array(
+        '#attributes' => array(
+          'class' => array('quicktabs-accordion'),
+          'id' => 'quicktabs-' . $qt_id,
+        ),
+      ),
+    );
+
+    $tab_pages = [];
+    foreach ($instance->getConfigurationData() as $index => $tab) {
+      $qsid = 'quickset-' . $qt_id;
+      $object = $type->createInstance($tab['type']);
+      $render = $object->render($tab);
+      $render['#prefix'] = '<h3><a href= "#' . $qsid . '_' . $index . '">' . $tab['title'] .'</a></h3><div>';
+      $render['#suffix'] = '</div>';
+      $build['pages'][$index] = $render;
+
+      // Array of tab pages to pass as settings ////////////
+      $tab['tab_page'] = $index;
+      $tab_pages[] = $tab;
     }
-    else {
-      $block_manager = \Drupal::service('plugin.manager.block');
-      // You can hard code configuration or you load from settings.
-      $config = [];
-      $plugin_block = $block_manager->createInstance($options['bid'], $config);
 
-      // Some blocks might implement access check.
-      //$access_result = $plugin_block->access(\Drupal::currentUser());
-      // Return empty render array if user doesn't have access.
-      //if ($access_result->isForbidden()) {
-        // You might need to add some cache tags/contexts.
-        //return [];
-      //}
+    $build['#attached'] = array(
+      'library' => array('quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.accordion'),
+      'drupalSettings' => array(
+        'quicktabs' => array(
+          'qt_' . $qt_id => array(
+            'tabs' => $tab_pages,
+            'active_tab' => $instance->getDefaultTab(),
+            'options' => array(
+              'active' => 1,
+              //'autoHeight' => 0,
+              'collapsible' => 1,
+              //'header' => 'h3',
+              //'event' => 'change',
+            ),
+          ),
+        ),
+      ),
+    );
 
-      $render = $plugin_block->build();
-    }
-
-    return $render;*/
-
-    return arrray();
+    return $build;
   }
 }

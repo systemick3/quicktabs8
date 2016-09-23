@@ -15,3 +15,29 @@ quicktabs.form:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
+
+quicktabs.jquery.ba-bbq:
+  version: VERSION
+  js:
+    js/jquery.ba-bbq.min.js: {}
+  dependencies:
+    - core/jquery
+
+quicktabs.bbq:
+  version: VERSION
+  js:
+    js/quicktabs_bbq.js: {}
+  dependencies:
+    - core/jquery
+    - quicktabs/jquery.ba-bbq
+
+quicktabs.accordion:
+  version: VERSION
+  js:
+    js/qt_accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
