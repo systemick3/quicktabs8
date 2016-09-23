@@ -41,3 +41,14 @@ quicktabs.accordion:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
+
+quicktabs.ui:
+  version: VERSION
+  js:
+    js/qt_ui_tabs.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.tabs
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
