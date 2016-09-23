@@ -13,8 +13,8 @@ use Drupal\quicktabs\Entity\QuickTabsInstance;
  * Provides an 'AccordianTabs' tab renderer.
  *
  * @TabRenderer(
- *   id = "accordian_tabs",
- *   name = @Translation("accordian"),
+ *   id = "accordion_tabs",
+ *   name = @Translation("accordion"),
  * )
  */
 class AccordianTabs extends TabRendererBase {
@@ -22,13 +22,14 @@ class AccordianTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(QuickTabsInstance $instance) {
+    $options = $instance->getOptions()['accordion_tabs'];
     $form = array();
     $form['history'] = array(
       '#type' => 'checkbox',
       '#title' => 'History',
       '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
-      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['history']) && $qt->options['history']),
+      '#default_value' => ($options['history'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['history'] : 0,
     );
     $form['jquery_ui'] = array(
       '#type' => 'fieldset',
@@ -37,12 +38,12 @@ class AccordianTabs extends TabRendererBase {
     $form['jquery_ui']['autoHeight'] = array(
       '#type' => 'checkbox',
       '#title' => 'Autoheight',
-      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['jquery_ui']['autoHeight']) && $qt->options['jquery_ui']['autoHeight']),
+      '#default_value' => ($options['jquery_ui']['autoHeight'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['autoHeight'] : 0,
     );
     $form['jquery_ui']['collapsible'] = array(
       '#type' => 'checkbox',
       '#title' => t('Collapsible'),
-      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'accordion' && isset($qt->options['jquery_ui']['collapsible']) && $qt->options['jquery_ui']['collapsible']),
+      '#default_value' => ($options['jquery_ui']['collapsible'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['collapsible'] : 0,
     );
     return $form;
   }

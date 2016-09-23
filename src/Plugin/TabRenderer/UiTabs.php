@@ -15,7 +15,7 @@ use Drupal\Core\Template\Attribute;
  *
  * @TabRenderer(
  *   id = "ui_tabs",
- *   name = @Translation("ui"),
+ *   name = @Translation("jquery ui"),
  * )
  */
 class UiTabs extends TabRendererBase {
@@ -23,13 +23,14 @@ class UiTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(QuickTabsInstance $instance) {
+    $options = $instance->getOptions()['ui_tabs'];
     $form = array();
     $form['history'] = array(
       '#type' => 'checkbox',
       '#title' => 'History',
       '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
-      '#default_value' => (isset($qt->renderer) && $qt->renderer == 'ui_tabs' && isset($qt->options['history']) && $qt->options['history']),
+      '#default_value' => ($options['history'] != NULL && $instance->getRenderer() == 'ui_tabs') ? $options['history'] : 0,
     );
     return $form;
   }

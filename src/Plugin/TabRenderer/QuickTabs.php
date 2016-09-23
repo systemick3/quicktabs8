@@ -25,7 +25,8 @@ class QuickTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($entity) {
+  public function optionsForm(QuickTabsInstance $instance) {
+    $options = $instance->getOptions()['quick_tabs'];
     $form = array();
     $form['ajax'] = array(
       '#type' => 'radios',
@@ -34,8 +35,7 @@ class QuickTabs extends TabRendererBase {
         TRUE => t('Yes') . ': ' . t('Load only the first tab on page view'),
         FALSE => t('No') . ': ' . t('Load all tabs on page view.'),
       ),
-      //'#default_value' => ($entity->isAjax() !== NULL) ? $entity->isAjax() : 0,
-      '#default_value' => ($entity->getOptions()['quick_tabs']['ajax'] !== NULL) ? $entity->getOptions()['quick_tabs']['ajax'] : 0,
+      '#default_value' => ($instance->getRenderer() == 'quick_tabs' && $options['ajax'] !== NULL) ? $options['ajax'] : 0,
       '#description' => t('Choose how the content of tabs should be loaded.<p>By choosing "Yes", only the first tab will be loaded when the page first viewed. Content for other tabs will be loaded only when the user clicks the other tab. This will provide faster initial page loading, but subsequent tab clicks will be slower. This can place less load on a server.</p><p>By choosing "No", all tabs will be loaded when the page is first viewed. This will provide slower initial page loading, and more server load, but subsequent tab clicks will be faster for the user. Use with care if you have heavy views.</p><p>Warning: if you enable Ajax, any block you add to this quicktabs block will be accessible to anonymous users, even if you place role restrictions on the quicktabs block. Do not enable Ajax if the quicktabs block includes any blocks with potentially sensitive information.</p>'),
       '#weight' => -6,
     );
