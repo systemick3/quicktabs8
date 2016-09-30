@@ -8,7 +8,19 @@ Drupal.behaviors.qt_accordion = {
       var id = $(this).attr('id');
       var qtKey = 'qt_' + this.id.substring(this.id.indexOf('-') +1);
       var options = drupalSettings.quicktabs[qtKey].options;
-      $(this).accordion(options);
+      //options = {
+        //'collapsible': 1,
+        //'active': 2
+      //}
+      if (options.history) {
+        //options.event = 'change';
+        $(this).accordion(options);
+        Drupal.quicktabsBbq($(this), 'h3 a', 'h3');
+      }
+      else {
+        $(this).accordion(options);
+      }
+      //$(this).accordion(options);
       //$(this).accordion({
         //'collapsible': 0
       //});

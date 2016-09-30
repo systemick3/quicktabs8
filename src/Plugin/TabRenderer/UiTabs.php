@@ -90,12 +90,14 @@ class UiTabs extends TabRendererBase {
     array_unshift($build, $tabs);
     
     // Attach js
+    $options = $instance->getOptions()['ui_tabs'];
     $build['#attached'] = array(
-      'library' => array('quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.ui'),
+      'library' => array('quicktabs/quicktabs.jquery.ba-bbq', 'quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.ui'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
+            'history' => $options['history'],
           ),
         ),
       ),
