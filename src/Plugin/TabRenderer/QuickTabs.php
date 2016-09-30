@@ -69,9 +69,10 @@ class QuickTabs extends TabRendererBase {
     // Tabs used to show/hide content
     $titles = array();
 
+    $is_ajax = $instance->getOptions()['quick_tabs']['ajax'];
     foreach ($instance->getConfigurationData() as $index => $tab) {
       // Build the pages //////////////////////////////////////
-      if ($instance->isAjax()) {
+      if ($is_ajax) {
         if ($instance->getDefaultTab() == $index) {
           $object = $type->createInstance($tab['type']);
           $render = $object->render($tab);
@@ -110,7 +111,7 @@ class QuickTabs extends TabRendererBase {
       }
 
       $link_classes = array();
-      if ($instance->isAjax()) {
+      if ($is_ajax) {
         $link_classes[] = 'use-ajax';
 
         if ($instance->getDefaultTab() == $index) {
