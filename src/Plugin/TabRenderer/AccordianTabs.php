@@ -25,30 +25,15 @@ class AccordianTabs extends TabRendererBase {
   public function optionsForm(QuickTabsInstance $instance) {
     $options = $instance->getOptions()['accordion_tabs'];
     $form = array();
-    $form['history'] = array(
-      '#type' => 'checkbox',
-      '#title' => 'History',
-      '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
-      '#default_value' => ($options['history'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['history'] : 0,
-    );
     $form['jquery_ui'] = array(
       '#type' => 'fieldset',
       '#title' => t('JQuery UI options'),
     );
-    //$form['jquery_ui']['autoHeight'] = array(
-      //'#type' => 'checkbox',
-      //'#title' => 'Autoheight',
-      //'#default_value' => ($options['jquery_ui']['autoHeight'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['autoHeight'] : 0,
-    //);
     $form['jquery_ui']['collapsible'] = array(
       '#type' => 'checkbox',
       '#title' => t('Collapsible'),
       '#default_value' => ($options['jquery_ui']['collapsible'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['collapsible'] : 0,
     );
-    //$form['jquery_ui']['heightStyle'] = array(
-      //'#type' => 'fieldset',
-      //'#title' => t('JQuery UI HeightStyle'),
-    //);
     $form['jquery_ui']['heightStyle'] = array(
       '#type' => 'radios',
       '#title' => t('JQuery UI HeightStyle'),
@@ -98,25 +83,17 @@ class AccordianTabs extends TabRendererBase {
     }
 
     $options = $instance->getOptions()['accordion_tabs'];
-
-    //print '<pre>';
-    //print_r($options);
-    //die(__FILE__.__LINE__);
-
     $build['#attached'] = array(
-      'library' => array('quicktabs/quicktabs.jquery.ba-bbq', 'quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.accordion'),
+      'library' => array('quicktabs/quicktabs.accordion'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
             'active_tab' => $instance->getDefaultTab(),
             'options' => array(
-              'history' => $options['history'],
               'active' => (int)$instance->getDefaultTab(),
               'heightStyle' => $options['jquery_ui']['heightStyle'],
               'collapsible' => (int)$options['jquery_ui']['collapsible'],
-              //'header' => 'h3',
-              //'event' => 'change',
             ),
           ),
         ),

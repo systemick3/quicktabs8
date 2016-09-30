@@ -24,15 +24,7 @@ class UiTabs extends TabRendererBase {
    * {@inheritdoc}
    */
   public function optionsForm(QuickTabsInstance $instance) {
-    $options = $instance->getOptions()['ui_tabs'];
-    $form = array();
-    $form['history'] = array(
-      '#type' => 'checkbox',
-      '#title' => 'History',
-      '#description' => t('Store tab state in the URL allowing for browser back / forward and bookmarks.'),
-      '#default_value' => ($options['history'] != NULL && $instance->getRenderer() == 'ui_tabs') ? $options['history'] : 0,
-    );
-    return $form;
+    return array();
   }
 
   /**
@@ -92,12 +84,11 @@ class UiTabs extends TabRendererBase {
     // Attach js
     $options = $instance->getOptions()['ui_tabs'];
     $build['#attached'] = array(
-      'library' => array('quicktabs/quicktabs.jquery.ba-bbq', 'quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.ui'),
+      'library' => array('quicktabs/quicktabs.ui'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
-            'history' => $options['history'],
           ),
         ),
       ),
