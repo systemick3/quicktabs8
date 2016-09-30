@@ -35,15 +35,29 @@ class AccordianTabs extends TabRendererBase {
       '#type' => 'fieldset',
       '#title' => t('JQuery UI options'),
     );
-    $form['jquery_ui']['autoHeight'] = array(
-      '#type' => 'checkbox',
-      '#title' => 'Autoheight',
-      '#default_value' => ($options['jquery_ui']['autoHeight'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['autoHeight'] : 0,
-    );
+    //$form['jquery_ui']['autoHeight'] = array(
+      //'#type' => 'checkbox',
+      //'#title' => 'Autoheight',
+      //'#default_value' => ($options['jquery_ui']['autoHeight'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['autoHeight'] : 0,
+    //);
     $form['jquery_ui']['collapsible'] = array(
       '#type' => 'checkbox',
       '#title' => t('Collapsible'),
       '#default_value' => ($options['jquery_ui']['collapsible'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['collapsible'] : 0,
+    );
+    //$form['jquery_ui']['heightStyle'] = array(
+      //'#type' => 'fieldset',
+      //'#title' => t('JQuery UI HeightStyle'),
+    //);
+    $form['jquery_ui']['heightStyle'] = array(
+      '#type' => 'radios',
+      '#title' => t('JQuery UI HeightStyle'),
+      '#options' => array(
+        'auto' => t('auto'),
+        'fill' => t('fill'),
+        'content' => t('content'),
+      ),
+      '#default_value' => ($options['jquery_ui']['heightStyle'] != NULL && $instance->getRenderer() == 'accordion_tabs') ? $options['jquery_ui']['heightStyle'] : 'auto',
     );
     return $form;
   }
@@ -83,17 +97,24 @@ class AccordianTabs extends TabRendererBase {
       $tab_pages[] = $tab;
     }
 
+    $options = $instance->getOptions()['accordion_tabs'];
+
+    //print '<pre>';
+    //print_r($options);
+    //die(__FILE__.__LINE__);
+
     $build['#attached'] = array(
-      'library' => array('quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.accordion'),
+      'library' => array('quicktabs/quicktabs.jquery.ba-bbq', 'quicktabs/quicktabs.bbq', 'quicktabs/quicktabs.accordion'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
             'active_tab' => $instance->getDefaultTab(),
             'options' => array(
-              'active' => 1,
-              //'autoHeight' => 0,
-              'collapsible' => 1,
+              'history' => $options['history'],
+              'active' => (int)$instance->getDefaultTab(),
+              'heightStyle' => $options['jquery_ui']['heightStyle'],
+              'collapsible' => (int)$options['jquery_ui']['collapsible'],
               //'header' => 'h3',
               //'event' => 'change',
             ),

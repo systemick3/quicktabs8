@@ -3,10 +3,12 @@
  * Implements history using the BBQ plugin.
  * See http://benalman.com/code/projects/jquery-bbq/examples/fragment-jquery-ui-tabs
  */
-(function($) {
+(function($, window, Drupal) {
+
+'use strict';
 
 Drupal.quicktabsBbq = function($tabset, clickSelector, changeSelector) {
-  
+
   changeSelector = changeSelector || clickSelector;
 
   // Define our own click handler for the tabs, overriding the default.
@@ -34,4 +36,4 @@ Drupal.quicktabsBbq = function($tabset, clickSelector, changeSelector) {
   $(window).trigger('hashchange');
 }
 
-})(jQuery);
+})(jQuery, window, Drupal);
