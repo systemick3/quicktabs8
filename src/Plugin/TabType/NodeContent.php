@@ -60,6 +60,10 @@ class NodeContent extends TabTypeBase {
     $node = \Drupal::entityTypeManager()->getStorage('node')->load($options['nid']);
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, $options['view_mode']);
 
+    if ($options['hide_title']) {
+      $build['#node']->setTitle(NULL);
+    }
+
     return $build;
   }
 }
