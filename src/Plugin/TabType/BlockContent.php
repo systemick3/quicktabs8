@@ -30,12 +30,22 @@ class BlockContent extends TabTypeBase {
       '#options' => $this->getBlockOptions(),
       '#default_value' => isset($tab['content'][$plugin_id]['options']['bid']) ? $tab['content'][$plugin_id]['options']['bid'] : '',
       '#title' => t('Select a block'),
+      '#ajax' => array(
+        'callback' => 'Drupal\quicktabs\Form\QuickTabsInstanceEditForm::blockTitleAjaxCallback',
+        'event' => 'change',
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => 'Please wait...',
+        ),
+        'effect' => 'fade',
+      ),
     );
     $form['block_title'] = array(
       '#type' => 'textfield',
       '#default_value' => isset($tab['content'][$plugin_id]['options']['block_title']) ? $tab['content'][$plugin_id]['options']['block_title'] : '',
       '#title' => t('Block Title'),
-      //'#element_validate' => array('quicktabs_callback_element_validate'),
+      '#prefix' => '<div id="block-title-textfield-' . $tab['delta'] . '">',
+      '#suffix' => '</div>'
     );
     $form['display_title'] = array(
       '#type' => 'checkbox',
