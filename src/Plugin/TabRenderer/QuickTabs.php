@@ -92,12 +92,17 @@ class QuickTabs extends TabRendererBase {
         $classes[] = 'quicktabs-hide';
       }
 
-      $attributes = new Attribute(array('id' => 'quicktabs-tabpage-' . $qt_id . '-' . $index));
-      $attributes['class'] = $classes;
-      $render['#prefix'] = '<div ' . $attributes . '>';
+      $render['#prefix'] = '<div>';
       $render['#suffix'] = '</div>';
+      $block_id = 'quicktabs-tabpage-' . $qt_id . '-' . $index;
 
-      $build['pages'][$index] = $render;
+      if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
+        $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
+      }
+      $build['pages'][$index]['#block'] = render($render);
+      $build['pages'][$index]['#classes'] = implode(' ', $classes);
+      $build['pages'][$index]['#id'] = $block_id;
+      $build['pages'][$index]['#theme'] = 'quicktabs_block_content';
 
       // Build the tabs ///////////////////////////////
       $options = array(

@@ -73,9 +73,14 @@ class AccordianTabs extends TabRendererBase {
       $qsid = 'quickset-' . $qt_id;
       $object = $type->createInstance($tab['type']);
       $render = $object->render($tab);
-      $render['#prefix'] = '<h3><a href= "#' . $qsid . '_' . $index . '">' . $tab['title'] .'</a></h3><div>';
-      $render['#suffix'] = '</div>';
-      $build['pages'][$index] = $render;
+
+      if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
+        $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
+      }
+      $build['pages'][$index]['#block'] = render($render);
+      $build['pages'][$index]['#prefix'] = '<h3><a href= "#' . $qsid . '_' . $index . '">' . $tab['title'] .'</a></h3><div>';
+      $build['pages'][$index]['#suffix'] = '</div>';
+      $build['pages'][$index]['#theme'] = 'quicktabs_block_content';
 
       // Array of tab pages to pass as settings ////////////
       $tab['tab_page'] = $index;
