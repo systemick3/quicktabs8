@@ -52,10 +52,15 @@ class UiTabs extends TabRendererBase {
 
       $tab_num = $index + 1;
       $attributes = new Attribute(array('id' => 'qt-' . $qt_id . '-ui-tabs' . $tab_num));
-      $render['#prefix'] = '<div ' . $attributes . '>';
-      $render['#suffix'] = '</div>';
 
-      $build['pages'][$index] = $render;
+      if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
+        $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
+      }
+
+      $build['pages'][$index]['#block'] = render($render);
+      $build['pages'][$index]['#prefix'] = '<div ' . $attributes . '>';
+      $build['pages'][$index]['#suffix'] = '</div>';
+      $build['pages'][$index]['#theme'] = 'quicktabs_block_content';
 
       $href = '#qt-'. $qt_id .'-ui-tabs' . $tab_num;
       $titles[] = array('#markup' => '<a href="'. $href .'">' . $tab['title'] .'</a>');

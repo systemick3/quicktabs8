@@ -31,10 +31,16 @@ class BlockContent extends TabTypeBase {
       '#default_value' => isset($tab['content'][$plugin_id]['options']['bid']) ? $tab['content'][$plugin_id]['options']['bid'] : '',
       '#title' => t('Select a block'),
     );
-    $form['hide_title'] = array(
+    $form['block_title'] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['block_title']) ? $tab['content'][$plugin_id]['options']['block_title'] : '',
+      '#title' => t('Block Title'),
+      //'#element_validate' => array('quicktabs_callback_element_validate'),
+    );
+    $form['display_title'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Hide the title of this block'),
-      '#default_value' => isset($tab['content'][$plugin_id]['options']['hide_title']) ? $tab['content'][$plugin_id]['options']['hide_title'] : 0,
+      '#title' => t('Display block title'),
+      '#default_value' => isset($tab['content'][$plugin_id]['options']['display_title']) ? $tab['content'][$plugin_id]['options']['display_title'] : 0,
     );
     return $form;
   }
@@ -44,6 +50,7 @@ class BlockContent extends TabTypeBase {
    */
   public function render(array $tab) {
     $options = $tab['content'][$tab['type']]['options'];
+
     if (strpos($options['bid'], 'block_content') !== FALSE) {
       $parts = explode(':', $options['bid']);
       $entity_manager = \Drupal::service('entity.manager');
