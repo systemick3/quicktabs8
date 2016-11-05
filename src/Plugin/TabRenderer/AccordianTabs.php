@@ -74,6 +74,12 @@ class AccordianTabs extends TabRendererBase {
       $object = $type->createInstance($tab['type']);
       $render = $object->render($tab);
 
+      // If user wants to hide empty tabs and there is no content
+      // then skip to next tab
+      if ($instance->getHideEmptyTabs() && empty($render)) {
+        continue;
+      }
+
       if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
         $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
       }

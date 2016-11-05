@@ -86,6 +86,12 @@ class QuickTabs extends TabRendererBase {
         $render = $object->render($tab);
       }
 
+      // If user wants to hide empty tabs and there is no content
+      // then skip to next tab
+      if ($instance->getHideEmptyTabs() && empty($render)) {
+        continue;
+      }
+
       $classes = array('quicktabs-tabpage');
 
       if ($instance->getDefaultTab() != $index) {
