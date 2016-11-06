@@ -131,8 +131,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
     // Show 2 empty tabs when adding a new QT instance
     if (empty($qt->tabs)) {
       $qt->tabs = array(
-        0 => array(),
-        1 => array(),
+        0 => [],
+        1 => [],
       );
     }
     else {
@@ -142,7 +142,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       }
 
       if ($form_state->get('num_tabs') > count($qt->tabs)) {
-        $qt->tabs[] = array();
+        $qt->tabs[] = [];
       }
     }
 
@@ -238,7 +238,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     // We need the configuration_data array to be indexed according to weight
     // So change the indexes here
-    $ordered_configuration_data = array();
+    $ordered_configuration_data = [];
     foreach ($this->entity->getConfigurationData() as $item) {
       $ordered_configuration_data[] = $item;
     }
@@ -282,13 +282,13 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
   private function getRow($row_number, $tab = NULL) {
     if ($tab === NULL) {
-      $tab = array();
+      $tab = [];
     }
 
     $type = \Drupal::service('plugin.manager.tab_type');
     $plugin_definitions = $type->getDefinitions();
 
-    $types = array();
+    $types = [];
     foreach ($plugin_definitions as $index => $def) {
       $name = $def['name'];
       $types[$index] = $name->render();
@@ -297,7 +297,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     $options = array('op1' => 'option 1', 'op2' => 'option 2');
 
     ksort($types);
-    $row = array();
+    $row = [];
     // TableDrag: Mark the table row as draggable.
     $row['#attributes']['class'][] = 'draggable';
     // TableDrag: Sort the table row according to its existing/configured weight.

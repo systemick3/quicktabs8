@@ -23,8 +23,8 @@ class QtabsContent extends TabTypeBase {
    */
   public function optionsForm($tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
-    $form = array();
-    $tab_options = array();
+    $form = [];
+    $tab_options = [];
     foreach (\Drupal::entityTypeManager()->getStorage('quicktabs_instance')->loadMultiple() as $machine_name => $entity) {
       // Do not offer the option to put a tab inside itself.
       if (!isset($tab['entity_id']) || $machine_name != $tab['entity_id']) {

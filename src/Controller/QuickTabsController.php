@@ -17,7 +17,7 @@ class QuickTabsController extends ControllerBase {
    */
   public function ajaxContent($js, $instance, $tab) {
     if ($js === 'nojs') {
-      return array();
+      return [];
     }
     else {
       $type = \Drupal::service('plugin.manager.tab_type');

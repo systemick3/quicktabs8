@@ -27,7 +27,7 @@ class BlockContent extends TabTypeBase {
    */
   public function optionsForm($tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
-    $form = array();
+    $form = [];
     $form['bid'] = array(
       '#type' => 'select',
       '#options' => $this->getBlockOptions(),
