@@ -6,6 +6,9 @@
 
 namespace Drupal\quicktabs\Plugin\TabType;
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\quicktabs\TabTypeBase;
 use Drupal\block\BlockListBuilder;
 
@@ -31,7 +34,7 @@ class BlockContent extends TabTypeBase {
       '#default_value' => isset($tab['content'][$plugin_id]['options']['bid']) ? $tab['content'][$plugin_id]['options']['bid'] : '',
       '#title' => t('Select a block'),
       '#ajax' => array(
-        'callback' => 'Drupal\quicktabs\Form\QuickTabsInstanceEditForm::blockTitleAjaxCallback',
+        'callback' => 'Drupal\quicktabs\Plugin\TabType\BlockContent::blockTitleAjaxCallback',
         'event' => 'change',
         'progress' => array(
           'type' => 'throbber',
@@ -103,5 +106,33 @@ class BlockContent extends TabTypeBase {
     }
     
     return $blocks;
+  }
+
+  /**
+   * Ajax callback to change block title when block is selected.
+   * TODO: Figure out how to get this working in the plugin - possibly a generic function
+   */
+  public function blockTitleAjaxCallback(array &$form, FormStateInterface $form_state) {
+    $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
+    $element_id = '#block-title-textfield-' . $tab_index;
+    $selected_block = $form_state->getValue('configuration_data')[$tab_index]['content']['block_content']['options']['bid'];
+
+    $block_manager = \Drupal::service('plugin.manager.block');
+    $context_repository = \Drupal::service('context.repository');
+    $definitions = $block_manager->getDefinitionsForContexts($context_repository->getAvailableContexts());
+
+    $form['block_title'] = array(
+      '#type' => 'textfield',
+      '#value' => $definitions[$selected_block]['admin_label'],
+      '#title' => t('Block Title'),
+      '#prefix' => '<div id="block-title-textfield-' . $tab_index . '">',
+      '#suffix' => '</div>'
+    );
+
+    $form_state->setRebuild(TRUE);
+    $ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['block_title']));
+
+    return $ajax_response;
   }
 }

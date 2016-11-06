@@ -6,6 +6,9 @@
 
 namespace Drupal\quicktabs\Plugin\TabType;
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\quicktabs\TabTypeBase;
 use Drupal\views\Views;
 
@@ -35,7 +38,7 @@ class ViewContent extends TabTypeBase {
       '#default_value' => $selected_view,
       '#title' => t('Select a view'),
       '#ajax' => array(
-        'callback' => 'Drupal\quicktabs\Form\QuickTabsInstanceEditForm::viewsDisplaysAjaxCallback',
+        'callback' => 'Drupal\quicktabs\Plugin\TabType\ViewContent::viewsDisplaysAjaxCallback',
         'event' => 'change',
         'progress' => array(
           'type' => 'throbber',
@@ -77,7 +80,31 @@ class ViewContent extends TabTypeBase {
   }
 
   /**
-   * Ajax callback for the add tab and remove tab buttons.
+   * Ajax callback to change views displays when view is selected.
+   * TODO: Figure out how to get this working in the plugin - possibly a generic function
+   */
+  public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
+    $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
+    $element_id = '#view-display-dropdown-' . $tab_index;
+    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view_content']['options']['vid'];
+    $wrapper = '<div id="view-display-dropdown-' . $tab_index . '">';
+    $form['display'] = array(
+      '#type' => 'select',
+      '#title' => 'display',
+      '#options' => ViewContent::getViewDisplays($selected_view),
+      '#prefix' => $wrapper,
+      '#suffix' => '</div>'
+    );
+
+    $form_state->setRebuild(TRUE);
+    $ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['display']));
+
+    return $ajax_response;
+  }
+
+  /**
+   * Update displays dropdowns.
    */
   public function getDisplaysCallback(array &$form, FormStateInterface $form_state) {
     // Instantiate an AjaxResponse Object to return.
