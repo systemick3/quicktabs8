@@ -24,7 +24,7 @@ class NodeContent extends TabTypeBase {
   public function optionsForm($tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
 
-    $form = array();
+    $form = [];
     $form['nid'] = array(
       '#type' => 'textfield',
       '#title' => t('Node'),
@@ -34,7 +34,7 @@ class NodeContent extends TabTypeBase {
       '#default_value' => isset($tab['content'][$plugin_id]['options']['nid']) ? $tab['content'][$plugin_id]['options']['nid'] : '',
     );
     $view_modes = \Drupal::entityManager()->getViewModes('node');
-    $options = array();
+    $options = [];
     foreach ($view_modes as $view_mode_name => $view_mode) {
       $options[$view_mode_name] = $view_mode['label'];
     }

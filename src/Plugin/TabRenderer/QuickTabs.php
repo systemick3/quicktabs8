@@ -27,7 +27,7 @@ class QuickTabs extends TabRendererBase {
    */
   public function optionsForm(QuickTabsInstance $instance) {
     $options = $instance->getOptions()['quick_tabs'];
-    $form = array();
+    $form = [];
     $form['ajax'] = array(
       '#type' => 'radios',
       '#title' => t('Ajax'),
@@ -52,8 +52,8 @@ class QuickTabs extends TabRendererBase {
     $type = \Drupal::service('plugin.manager.tab_type');
 
     // The render array used to build the block
-    $build = array();
-    $build['pages'] = array();
+    $build = [];
+    $build['pages'] = [];
     $build['pages']['#theme_wrappers'] = array(
       'container' => array(
         '#attributes' => array(
@@ -64,10 +64,10 @@ class QuickTabs extends TabRendererBase {
     );
 
     // Pages of content that will be shown or hidden
-    $tab_pages = array();
+    $tab_pages = [];
 
     // Tabs used to show/hide content
-    $titles = array();
+    $titles = [];
 
     $is_ajax = $instance->getOptions()['quick_tabs']['ajax'];
     foreach ($instance->getConfigurationData() as $index => $tab) {
@@ -116,12 +116,12 @@ class QuickTabs extends TabRendererBase {
         'fragment' => 'qt-quicktabs',
         'attributes' => array('id' => 'quicktabs-tab-' . $qt_id . '-' . $index),
       );
-      $wrapper_attributes = array();
+      $wrapper_attributes = [];
       if ($instance->getDefaultTab() == $index) {
         $wrapper_attributes['class'] = array('active');
       }
 
-      $link_classes = array();
+      $link_classes = [];
       if ($is_ajax) {
         $link_classes[] = 'use-ajax';
 

@@ -24,7 +24,7 @@ class UiTabs extends TabRendererBase {
    * {@inheritdoc}
    */
   public function optionsForm(QuickTabsInstance $instance) {
-    return array();
+    return [];
   }
 
   /**
@@ -35,14 +35,14 @@ class UiTabs extends TabRendererBase {
     $type = \Drupal::service('plugin.manager.tab_type');
 
     // The render array used to build the block
-    $build = array();
-    $build['pages'] = array();
+    $build = [];
+    $build['pages'] = [];
     
     // Pages of content that will be shown or hidden
-    $tab_pages = array();
+    $tab_pages = [];
 
     // Tabs used to show/hide content
-    $titles = array();
+    $titles = [];
 
     foreach ($instance->getConfigurationData() as $index => $tab) {
       $object = $type->createInstance($tab['type']);

@@ -23,7 +23,7 @@ class CallbackContent extends TabTypeBase {
    */
   public function optionsForm($tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
-    $form = array();
+    $form = [];
     $form['path'] = array(
       '#type' => 'textfield',
       '#default_value' => isset($tab['content'][$plugin_id]['options']['path']) ? $tab['content'][$plugin_id]['options']['path'] : '',

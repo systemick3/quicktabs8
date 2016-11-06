@@ -24,7 +24,7 @@ class AccordianTabs extends TabRendererBase {
    */
   public function optionsForm(QuickTabsInstance $instance) {
     $options = $instance->getOptions()['accordion_tabs'];
-    $form = array();
+    $form = [];
     $form['jquery_ui'] = array(
       '#type' => 'fieldset',
       '#title' => t('JQuery UI options'),
@@ -55,8 +55,8 @@ class AccordianTabs extends TabRendererBase {
     $type = \Drupal::service('plugin.manager.tab_type');
 
     // The render array used to build the block
-    $build = array();
-    $build['pages'] = array();
+    $build = [];
+    $build['pages'] = [];
 
     // Add a wrapper
     $build['#theme_wrappers'] = array(

@@ -31,7 +31,7 @@ class ViewContent extends TabTypeBase {
     $views_keys = array_keys($views);
     $selected_view = (isset($tab['content'][$plugin_id]['options']['vid']) ? $tab['content'][$plugin_id]['options']['vid'] : (isset($views_keys[0]) ? $views_keys[0] : ''));
 
-    $form = array();
+    $form = [];
     $form['vid'] = array(
       '#type' => 'select',
       '#options' => $views,
@@ -72,7 +72,7 @@ class ViewContent extends TabTypeBase {
    */
   public function render(array $tab) {
     $options = $tab['content'][$tab['type']]['options'];
-    $args = empty($options['args']) ? array() : array_map('trim', explode(',', $options['args']));
+    $args = empty($options['args']) ? [] : array_map('trim', explode(',', $options['args']));
     $view = Views::getView($options['vid']);
     $render = $view->buildRenderable($options['display'], $args);
 
@@ -115,7 +115,7 @@ class ViewContent extends TabTypeBase {
   }
   
   private function getViews() {
-    $views = array();
+    $views = [];
     foreach (Views::getEnabledViews() as $view_name => $view) {
       $views[$view_name] = $view->label() . ' (' . $view_name . ')';
     }
@@ -125,7 +125,7 @@ class ViewContent extends TabTypeBase {
   }
 
   public function getViewDisplays($view_name) {
-    $displays = array();
+    $displays = [];
     if (empty($view_name)) {
       return $displays;
     }
