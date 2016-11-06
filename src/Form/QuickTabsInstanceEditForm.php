@@ -193,58 +193,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
   }
   
   /**
-   * Ajax callback to change views displays when view is selected.
-   * TODO: Figure out how to get this working in the plugin - possibly a generic function
-   */
-  public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
-    $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
-    $element_id = '#view-display-dropdown-' . $tab_index;
-    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view_content']['options']['vid'];
-    $wrapper = '<div id="view-display-dropdown-' . $tab_index . '">';
-    $form['display'] = array(
-      '#type' => 'select',
-      '#title' => 'display',
-      '#options' => ViewContent::getViewDisplays($selected_view),
-      '#prefix' => $wrapper,
-      '#suffix' => '</div>'
-    );
-
-    $form_state->setRebuild(TRUE);
-    $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['display']));
-
-    return $ajax_response;
-  }
-
-  /**
-   * Ajax callback to change block title when block is selected.
-   * TODO: Figure out how to get this working in the plugin - possibly a generic function
-   */
-  public function blockTitleAjaxCallback(array &$form, FormStateInterface $form_state) {
-    $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
-    $element_id = '#block-title-textfield-' . $tab_index;
-    $selected_block = $form_state->getValue('configuration_data')[$tab_index]['content']['block_content']['options']['bid'];
-
-    $block_manager = \Drupal::service('plugin.manager.block');
-    $context_repository = \Drupal::service('context.repository');
-    $definitions = $block_manager->getDefinitionsForContexts($context_repository->getAvailableContexts());
-
-    $form['block_title'] = array(
-      '#type' => 'textfield',
-      '#value' => $definitions[$selected_block]['admin_label'],
-      '#title' => t('Block Title'),
-      '#prefix' => '<div id="block-title-textfield-' . $tab_index . '">',
-      '#suffix' => '</div>'
-    );
-
-    $form_state->setRebuild(TRUE);
-    $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['block_title']));
-
-    return $ajax_response;
-  }
-
-  /**
    * Submit handler for the 'Add Tab' and 'Remove' buttons.
    */
   public function ajaxFormSubmit(array &$form, FormStateInterface $form_state) {
