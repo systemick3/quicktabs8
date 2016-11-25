@@ -78,12 +78,11 @@ class BlockContent extends TabTypeBase {
       $plugin_block = $block_manager->createInstance($options['bid'], $config);
 
       // Some blocks might implement access check.
-      //$access_result = $plugin_block->access(\Drupal::currentUser());
+      $access_result = $plugin_block->access(\Drupal::currentUser(), TRUE);
       // Return empty render array if user doesn't have access.
-      //if ($access_result->isForbidden()) {
-        // You might need to add some cache tags/contexts.
-        //return [];
-      //}
+      if ($access_result->isForbidden()) {
+        return [];
+      }
 
       $render = $plugin_block->build();
     }
