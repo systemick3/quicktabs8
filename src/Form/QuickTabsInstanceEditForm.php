@@ -141,6 +141,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
         $form_state->set('num_tabs', $form_state->get('num_tabs') - 1);
       }
 
+      // If the number of rows has been incremented
+      // add another row
       if ($form_state->get('num_tabs') > count($qt->tabs)) {
         $qt->tabs[] = [];
       }
@@ -156,6 +158,9 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
     $form['configuration_data_wrapper']['configuration_data'] = $this->getConfigurationDataForm($qt);
 
+    // There are two functions attached to the more button
+    // The submit function will be called first and will used to increment the number of rows
+    // The callback function will then return the rendered rows
     $form['tabs_more'] = array(
       '#name' => 'tabs_more',
       '#type' => 'submit',
@@ -183,6 +188,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
   /**
    * Ajax callback for the add tab and remove tab buttons.
+   * Returns the table rows
    */
   public function ajaxFormCallback(array &$form, FormStateInterface $form_state) {
     // Instantiate an AjaxResponse Object to return.
@@ -194,6 +200,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
   
   /**
    * Submit handler for the 'Add Tab' and 'Remove' buttons.
+   * Removes a row or increments the number of rows depending which button is clicked
    */
   public function ajaxFormSubmit(array &$form, FormStateInterface $form_state) {
     if ($form_state->getTriggeringElement()['#name'] === 'tabs_more') {
@@ -335,8 +342,12 @@ class QuickTabsInstanceEditForm extends EntityForm {
       $row['content'][$index]['options'] = $object->optionsForm($tab);
     }
 
+    // There are two functions attached to the remove button
+    // The submit function will be called first and will used to remove the selected row
+    // The callback function will then return the rendered rows
     $row['operations'] = array(
       '#row_number' => $row_number,
+      '#name' => 'row-' . $row_number, // We need this - the call to getTriggeringElement when clicking the remove button won't work without it
       '#type' => 'submit',
       '#value' => $this->t('Remove'),
       '#attributes' => array('class' => array('delete-tab'), 'title' => t('Click here to delete this tab.')),
