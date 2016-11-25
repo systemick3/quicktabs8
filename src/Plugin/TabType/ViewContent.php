@@ -74,6 +74,12 @@ class ViewContent extends TabTypeBase {
     $options = $tab['content'][$tab['type']]['options'];
     $args = empty($options['args']) ? [] : array_map('trim', explode(',', $options['args']));
     $view = Views::getView($options['vid']);
+
+    // Return empty render array if user doesn't have access.
+    if (!$view->access($options['display'], \Drupal::currentUser())) {
+      return [];
+    }
+
     $render = $view->buildRenderable($options['display'], $args);
 
     return $render;

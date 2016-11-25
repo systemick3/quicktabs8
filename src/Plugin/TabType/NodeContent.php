@@ -58,6 +58,13 @@ class NodeContent extends TabTypeBase {
   public function render(array $tab) {
     $options = $tab['content'][$tab['type']]['options'];
     $node = \Drupal::entityTypeManager()->getStorage('node')->load($options['nid']);
+
+    $access_result = $node->access('view', \Drupal::currentUser(), TRUE);
+    // Return empty render array if user doesn't have access.
+    if ($access_result->isForbidden()) {
+      return [];
+    }
+
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node, $options['view_mode']);
 
     if ($options['hide_title']) {
