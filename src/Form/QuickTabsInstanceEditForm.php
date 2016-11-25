@@ -353,16 +353,4 @@ class QuickTabsInstanceEditForm extends EntityForm {
 
     return $row;
   }
-
-  /*private function getTabOptions() {
-    $type = \Drupal::service('plugin.manager.tab_renderer');
-    $plugin_definitions = $type->getDefinitions();
-    $options = [];
-
-    foreach ($plugin_definitions as $index => $def) {
-      $options[$index] = $def['name']->__toString();
-    }
-
-    return $options;
-  }*/
 }
