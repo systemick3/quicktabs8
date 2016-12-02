@@ -11,6 +11,7 @@ use Drupal\quicktabs\Entity\QuickTabsInstance;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Provides a 'QuickTabs' tab renderer.
@@ -135,7 +136,7 @@ class QuickTabs extends TabRendererBase {
 
       $titles[] = array(
         '0' => Link::fromTextAndUrl(
-          $tab['title'],
+          new TranslatableMarkup($tab['title']),
           Url::fromRoute(
             'quicktabs.ajax_content',
             array(

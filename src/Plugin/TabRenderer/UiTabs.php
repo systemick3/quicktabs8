@@ -9,6 +9,7 @@ namespace Drupal\quicktabs\Plugin\TabRenderer;
 use Drupal\quicktabs\TabRendererBase;
 use Drupal\quicktabs\Entity\QuickTabsInstance;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Provides a 'ui tabs' tab renderer.
@@ -69,7 +70,7 @@ class UiTabs extends TabRendererBase {
       $build['pages'][$index]['#theme'] = 'quicktabs_block_content';
 
       $href = '#qt-'. $qt_id .'-ui-tabs' . $tab_num;
-      $titles[] = array('#markup' => '<a href="'. $href .'">' . $tab['title'] .'</a>');
+      $titles[] = array('#markup' => '<a href="'. $href .'">' . new TranslatableMarkup($tab['title']) .'</a>');
       
       $tab_pages[] = $tab;
     }
@@ -94,12 +95,14 @@ class UiTabs extends TabRendererBase {
     
     // Attach js
     $options = $instance->getOptions()['ui_tabs'];
+    $default_tab = $instance->getDefaultTab();
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs.ui'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
+            'default_tab' => $default_tab,
           ),
         ),
       ),
