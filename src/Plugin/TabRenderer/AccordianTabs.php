@@ -8,6 +8,7 @@ namespace Drupal\quicktabs\Plugin\TabRenderer;
 
 use Drupal\quicktabs\TabRendererBase;
 use Drupal\quicktabs\Entity\QuickTabsInstance;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Provides an 'AccordianTabs' tab renderer.
@@ -84,7 +85,7 @@ class AccordianTabs extends TabRendererBase {
         $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
       }
       $build['pages'][$index]['#block'] = render($render);
-      $build['pages'][$index]['#prefix'] = '<h3><a href= "#' . $qsid . '_' . $index . '">' . $tab['title'] .'</a></h3><div>';
+      $build['pages'][$index]['#prefix'] = '<h3><a href= "#' . $qsid . '_' . $index . '">' . new TranslatableMarkup($tab['title']) .'</a></h3><div>';
       $build['pages'][$index]['#suffix'] = '</div>';
       $build['pages'][$index]['#theme'] = 'quicktabs_block_content';
 
