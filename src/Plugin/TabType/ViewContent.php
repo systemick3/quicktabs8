@@ -92,19 +92,8 @@ class ViewContent extends TabTypeBase {
   public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
     $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
     $element_id = '#view-display-dropdown-' . $tab_index;
-    $selected_view = $form_state->getValue('configuration_data')[$tab_index]['content']['view_content']['options']['vid'];
-    $wrapper = '<div id="view-display-dropdown-' . $tab_index . '">';
-    $form['display'] = array(
-      '#type' => 'select',
-      '#title' => 'display',
-      '#options' => ViewContent::getViewDisplays($selected_view),
-      '#prefix' => $wrapper,
-      '#suffix' => '</div>'
-    );
-
-    $form_state->setRebuild(TRUE);
     $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['display']));
+    $ajax_response->addCommand(new ReplaceCommand($element_id, $form['configuration_data_wrapper']['configuration_data'][$tab_index]['content']['view_content']['options']['display']));
 
     return $ajax_response;
   }
