@@ -148,8 +148,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
       }
     }
 
-    $form_state->set('num_tabs', count($qt->tabs));
-
     $form['configuration_data_wrapper'] = array(
       '#tree' => FALSE,
       '#weight' => -3,
