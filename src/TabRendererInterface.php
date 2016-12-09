@@ -7,6 +7,7 @@
 namespace Drupal\quicktabs;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\quicktabs\Entity\QuickTabsInstance;
 
 /**
  * Defines an interface for tab renderer plugins.
@@ -14,16 +15,16 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 interface TabRendererInterface extends PluginInspectionInterface {
 
   /**
-   * Return the name of the tab renderer.
-   *
-   * @return string
-   */
-  public function getName();
-  
-  /**
    * Return form elements used on the edit/add from.
    *
    * @return array
    */
-  //public function optionsForm();
+  public function optionsForm(QuickTabsInstance $instance);
+  
+  /**
+   * Return a render array for the whole Quick Tabs instance.
+   *
+   * @return array
+   */
+  public function render(QuickTabsInstance $instance);
 }

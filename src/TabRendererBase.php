@@ -18,7 +18,7 @@ abstract class TabRendererBase extends PluginBase implements TabRendererInterfac
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(QuickTabsInstance $instance) {
     return [];
   }
   
