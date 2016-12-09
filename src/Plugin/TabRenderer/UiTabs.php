@@ -24,13 +24,6 @@ class UiTabs extends TabRendererBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm(QuickTabsInstance $instance) {
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function render(QuickTabsInstance $instance) {
     $qt_id = $instance->id();
     $type = \Drupal::service('plugin.manager.tab_type');

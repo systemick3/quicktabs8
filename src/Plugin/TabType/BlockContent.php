@@ -13,7 +13,7 @@ use Drupal\quicktabs\TabTypeBase;
 use Drupal\block\BlockListBuilder;
 
 /**
- * Provides a 'blcok content' tab type.
+ * Provides a 'block content' tab type.
  *
  * @TabType(
  *   id = "block_content",
