@@ -14,16 +14,19 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 interface TabTypeInterface extends PluginInspectionInterface {
 
   /**
-   * Return the name of the ice cream flavor.
-   *
-   * @return string
-   */
-  public function getName();
-  
-  /**
    * Return form elemets used on the edit/add from.
+   *
+   * @param $tab - array
    *
    * @return array
    */
-  //public function optionsForm();
+  public function optionsForm(array $tab);
+  
+  /**
+   * Return a render array for theme layer to process.
+   *
+   * @return string
+   */
+  public function render(array $tab);
+  
 }

@@ -25,7 +25,7 @@ class BlockContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(array $tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
     $form = [];
     $form['bid'] = array(
@@ -109,7 +109,6 @@ class BlockContent extends TabTypeBase {
 
   /**
    * Ajax callback to change block title when block is selected.
-   * TODO: Figure out how to get this working in the plugin - possibly a generic function
    */
   public function blockTitleAjaxCallback(array &$form, FormStateInterface $form_state) {
     $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];

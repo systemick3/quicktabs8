@@ -21,7 +21,7 @@ class NodeContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(array $tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
 
     $form = [];

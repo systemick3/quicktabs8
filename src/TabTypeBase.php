@@ -10,17 +10,17 @@ use Drupal\Component\Plugin\PluginBase;
 
 abstract class TabTypeBase extends PluginBase implements TabTypeInterface {
 
-  public function getName() {
+  protected function getName() {
     return $this->pluginDefinition['name'];
   }
 
   /**
    * {@inheritdoc}
    */
-  abstract public function optionsForm($tab);
+  abstract public function optionsForm(array $tab);
   
   /**
    * {@inheritdoc}
    */
-  abstract public function render(array $options);
+  abstract public function render(array $tab);
 }
