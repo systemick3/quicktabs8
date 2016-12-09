@@ -120,7 +120,7 @@ class ViewContent extends TabTypeBase {
     foreach ($view->get('display') as $id => $display) {
       $enabled = !empty($display['display_options']['enabled']) || !array_key_exists('enabled', $display['display_options']);
       if ($enabled) {
-        $displays[$id] = $id .': '. $display->display_title;
+        $displays[$id] = $id .': '. $display['display_title'];
       }
     }
 

@@ -101,6 +101,18 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -3,
     );
 
+    $tab_titles = array(
+      QuickTabsInstanceEditForm::QUICKTABS_DELTA_NONE => t('- None -'),
+    );
+
+    $delta = 0;
+    if (!empty($qt->tabs)) {
+      foreach ($qt->tabs as $tab) {
+        $tab_titles[$delta] = $tab['title'];
+        $delta++;
+      }
+    }
+
     $form['default_tab'] = array(
       '#type' => 'select',
       '#title' => t('Default tab'),
@@ -117,18 +129,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
     }
     else {
       $qt->tabs = $this->entity->getConfigurationData();
-    }
-
-    $tab_titles = array(
-      QuickTabsInstanceEditForm::QUICKTABS_DELTA_NONE => t('- None -'),
-    );
-
-    $delta = 0;
-    if (!empty($qt->tabs)) {
-      foreach ($qt->tabs as $tab) {
-        $tab_titles[$delta] = $tab['title'];
-        $delta++;
-      }
     }
 
     // Show 2 empty tabs when adding a new QT instance
