@@ -25,7 +25,7 @@ class ViewContent extends TabTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function optionsForm($tab) {
+  public function optionsForm(array $tab) {
     $plugin_id = $this->getPluginDefinition()['id'];
     $views = $this->getViews();
     $views_keys = array_keys($views);
