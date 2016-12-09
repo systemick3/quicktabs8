@@ -61,11 +61,13 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -8,
     );
 
+    // Instantiate all TabRenderer plugins 
     $type = \Drupal::service('plugin.manager.tab_renderer');
     $plugin_definitions = $type->getDefinitions();
     $renderers = [];
     $renderer_form_options = [];
 
+    // Use the name of each plugin to create the dropdown
     foreach ($plugin_definitions as $index => $def) {
       $renderers[$index] = $def['name']->__toString();
       $object = $type->createInstance($index);
@@ -81,8 +83,8 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -7,
     );
 
-    // Add the renderer options form elements to the form, to be shown only if the
-    // renderer in question is selected.
+    // Add the renderer options form elements to the form. 
+    // Ue Drupal Form API magic to ensure only the selected rendrer options are visible
     $form['options'] = array('#tree' => TRUE, '#weight' => -6);
     foreach ($renderer_form_options as $renderer => $options) {
       foreach ($options as &$option) {
@@ -99,6 +101,16 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#weight' => -3,
     );
 
+    $form['default_tab'] = array(
+      '#type' => 'select',
+      '#title' => t('Default tab'),
+      '#options' => $tab_titles,
+      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
+      '#access' => !empty($tab_titles),
+      '#weight' => -4,
+    );
+
+    // Create a table with each tr corresponding to a tab
     $qt = new \stdClass;
     if (!empty($form_state->getValue('configuration_data'))) {
       $qt->tabs = $form_state->getValue('configuration_data');
@@ -118,15 +130,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
         $delta++;
       }
     }
-
-    $form['default_tab'] = array(
-      '#type' => 'select',
-      '#title' => t('Default tab'),
-      '#options' => $tab_titles,
-      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
-      '#access' => !empty($tab_titles),
-      '#weight' => -4,
-    );
 
     // Show 2 empty tabs when adding a new QT instance
     if (empty($qt->tabs)) {
@@ -179,6 +182,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       ),
     );
 
+    // The form js will ensure that only one set of tab options is visible
     $form['#attached']['library'][] = 'quicktabs/quicktabs.form';
 
     return $form;
