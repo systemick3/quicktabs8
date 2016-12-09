@@ -87,7 +87,6 @@ class ViewContent extends TabTypeBase {
 
   /**
    * Ajax callback to change views displays when view is selected.
-   * TODO: Figure out how to get this working in the plugin - possibly a generic function
    */
   public function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
     $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
@@ -98,17 +97,6 @@ class ViewContent extends TabTypeBase {
     return $ajax_response;
   }
 
-  /**
-   * Update displays dropdowns.
-   */
-  public function getDisplaysCallback(array &$form, FormStateInterface $form_state) {
-    // Instantiate an AjaxResponse Object to return.
-    $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new HtmlCommand('#configuration-data-wrapper', $form['configuration_data_wrapper']['configuration_data']));
-
-    return $ajax_response;
-  }
-  
   private function getViews() {
     $views = [];
     foreach (Views::getEnabledViews() as $view_name => $view) {
@@ -119,6 +107,9 @@ class ViewContent extends TabTypeBase {
     return $views;
   }
 
+  /**
+   * Get displays for a given view.
+   */
   public function getViewDisplays($view_name) {
     $displays = [];
     if (empty($view_name)) {
