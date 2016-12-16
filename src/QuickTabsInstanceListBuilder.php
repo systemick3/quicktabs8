@@ -38,17 +38,17 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
 
     if ($entity->hasLinkTemplate('edit')) {
       $operations['edit'] = array(
-        'title' => t('Edit quicktab'),
+        'title' => t('Edit Quick Tab'),
         'weight' => 10,
         'url' => $entity->urlInfo('edit'),
       );
       $operations['delete'] = array(
-        'title' => t('Delete quicktab'),
+        'title' => t('Delete Quick Tab'),
         'weight' => 20,
         'url' => $entity->urlInfo('delete'),
       );
       $operations['duplicate'] = array(
-        'title' => t('Duplicate quicktab'),
+        'title' => t('Duplicate Quick Tab'),
         'weight' => 40,
         'url' => $entity->urlInfo('duplicate'),
       );

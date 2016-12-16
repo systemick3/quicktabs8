@@ -43,7 +43,7 @@ class QuickTabsInstanceDuplicateForm extends EntityForm {
       '#machine_name' => array(
         'exists' => 'quicktabs_machine_name_exists',
       ),
-      '#description' => $this->t('A unique machine-readable name for this Quicktabs instance. It must only contain lowercase letters, numbers, and underscores. The machine name will be used internally by Quicktabs and will be used in the CSS ID of your Quicktabs block.'),
+      '#description' => $this->t('A unique machine-readable name for this QuickTabs instance. It must only contain lowercase letters, numbers, and underscores. The machine name will be used internally by QuickTabs and will be used in the CSS ID of your QuickTabs block.'),
       '#weight' => -8,
     );
     

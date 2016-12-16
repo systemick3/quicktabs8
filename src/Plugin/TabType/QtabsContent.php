@@ -33,8 +33,8 @@ class QtabsContent extends TabTypeBase {
     }
     $form['machine_name'] = array(
       '#type' => 'select',
-      '#title' => t('Quicktabs instance'),
-      '#description' => t('The Quicktabs instance to put inside this tab.'),
+      '#title' => t('QuickTabs instance'),
+      '#description' => t('The QuickTabs instance to put inside this tab.'),
       '#options' => $tab_options,
       '#default_value' => isset($tab['content'][$plugin_id]['options']['machine_name']) ? $tab['content'][$plugin_id]['options']['machine_name'] : '',
     );
