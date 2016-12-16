@@ -174,7 +174,7 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
    * @return \Drupal\quicktabs\Entity\QuickTabsInstance
    *   The loaded entity.
    */
-  public static function getQuicktabsInstance($id) {
+  public static function getQuickTabsInstance($id) {
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($id);
     return $qt;
   }

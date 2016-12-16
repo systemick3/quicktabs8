@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\quicktabs\Controller\QuicktabsController.
+ * Contains \Drupal\quicktabs\Controller\QuickTabsController.
  */
 
 namespace Drupal\quicktabs\Controller;

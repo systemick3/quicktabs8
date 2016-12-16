@@ -55,9 +55,9 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#required' => TRUE,
       '#default_value' => $this->entity->id(),
       '#machine_name' => array(
-        'exists' => 'Drupal\quicktabs\Entity\QuicktabsInstance::getQuicktabsInstance',
+        'exists' => 'Drupal\quicktabs\Entity\QuickTabsInstance::getQuickTabsInstance',
       ),
-      '#description' => $this->t('A unique machine-readable name for this Quicktabs instance. It must only contain lowercase letters, numbers, and underscores. The machine name will be used internally by Quicktabs and will be used in the CSS ID of your Quicktabs block.'),
+      '#description' => $this->t('A unique machine-readable name for this QuickTabs instance. It must only contain lowercase letters, numbers, and underscores. The machine name will be used internally by QuickTabs and will be used in the CSS ID of your QuickTabs block.'),
       '#weight' => -8,
     );
 

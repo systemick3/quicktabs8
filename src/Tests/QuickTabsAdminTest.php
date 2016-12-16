@@ -74,13 +74,13 @@ class QuickTabsAdminTest extends WebTestBase {
   /**
    * Test all vocabularies appear on admin page.
    */
-  function testQuicktabsAdmin() {
+  function testQuickTabsAdmin() {
     $this->drupalGet('admin/structure/quicktabs');
     $this->assertResponse(200);
     $this->assertRaw('Quick Tabs');
     $this->drupalGet('admin/structure/quicktabs/add');
     $this->assertResponse(200);
-    $this->assertRaw('Add Quicktabs Instance');
+    $this->assertRaw('Add QuickTabs Instance');
     $this->assertRaw('Name');
     $this->assertRaw('Renderer');
     $this->assertRaw('Default tab');
@@ -142,6 +142,6 @@ class QuickTabsAdminTest extends WebTestBase {
     $this->drupalPostForm('admin/structure/quicktabs/' . $qt->id() . '/delete', [], t('Delete'));
 
     $qt = \Drupal::service('entity.manager')->getStorage('quicktabs_instance')->load($edit['id']);
-    $this->assertNull($qt, t('Quicktabs instance not found in database'));
+    $this->assertNull($qt, t('QuickTabs instance not found in database'));
   }
 }
