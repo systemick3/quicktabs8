@@ -14,15 +14,13 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\quicktabs\Plugin\TabType\ViewContent;
+use Drupal\quicktabs\Entity\QuickTabsInstance;
 
 /**
  * Class QuickTabsInstanceEditForm
  *
  */
 class QuickTabsInstanceEditForm extends EntityForm {
-
-  const QUICKTABS_DELTA_NONE = '9999';
 
   /**
    * {@inheritdoc}
@@ -102,7 +100,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     );
 
     $tab_titles = array(
-      QuickTabsInstanceEditForm::QUICKTABS_DELTA_NONE => t('- None -'),
+      QuickTabsInstance::QUICKTABS_DELTA_NONE => t('- None -'),
     );
 
     // Create a table with each tr corresponding to a tab
@@ -137,8 +135,10 @@ class QuickTabsInstanceEditForm extends EntityForm {
     $delta = 0;
     if (!empty($qt->tabs)) {
       foreach ($qt->tabs as $tab) {
-        $tab_titles[$delta] = $tab['title'];
-        $delta++;
+        if (!empty($tab)) {
+          $tab_titles[$delta] = $tab['title'];
+          $delta++;
+        }
       }
     }
 
