@@ -105,23 +105,6 @@ class QuickTabsInstanceEditForm extends EntityForm {
       QuickTabsInstanceEditForm::QUICKTABS_DELTA_NONE => t('- None -'),
     );
 
-    $delta = 0;
-    if (!empty($qt->tabs)) {
-      foreach ($qt->tabs as $tab) {
-        $tab_titles[$delta] = $tab['title'];
-        $delta++;
-      }
-    }
-
-    $form['default_tab'] = array(
-      '#type' => 'select',
-      '#title' => t('Default tab'),
-      '#options' => $tab_titles,
-      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
-      '#access' => !empty($tab_titles),
-      '#weight' => -4,
-    );
-
     // Create a table with each tr corresponding to a tab
     $qt = new \stdClass;
     if (!empty($form_state->getValue('configuration_data'))) {
@@ -150,6 +133,24 @@ class QuickTabsInstanceEditForm extends EntityForm {
         $qt->tabs[] = [];
       }
     }
+    
+    $delta = 0;
+    if (!empty($qt->tabs)) {
+      foreach ($qt->tabs as $tab) {
+        $tab_titles[$delta] = $tab['title'];
+        $delta++;
+      }
+    }
+
+    $form['default_tab'] = array(
+      '#type' => 'select',
+      '#title' => t('Default tab'),
+      '#options' => $tab_titles,
+      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
+      '#access' => !empty($tab_titles),
+      '#weight' => -4,
+    );
+
 
     $form['configuration_data_wrapper'] = array(
       '#tree' => FALSE,
