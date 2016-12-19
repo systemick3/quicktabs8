@@ -20,8 +20,9 @@ Installation & Use:
 4.  Use the Add another tab button to add more tabs.
 5.  Use the drag handles on the left to re-arrange tabs.
 6.  Once you have defined all the tabs, click 'Save'.
-7.  You new block will be available at admin/structure/blocks.
-8.  Configure & enable it as required.
+7.  Be sure to FLUSH THE CACHE - when working with blocks you need to flush the cache whenever you make a change
+8.  You new block will be available at admin/structure/blocks.
+9.  Configure & enable it as required.
 
 Note:
 -------------------------------------------------------------------------------
