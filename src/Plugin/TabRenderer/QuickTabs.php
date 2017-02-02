@@ -103,7 +103,7 @@ class QuickTabs extends TabRendererBase {
       $render['#suffix'] = '</div>';
       $block_id = 'quicktabs-tabpage-' . $qt_id . '-' . $index;
 
-      if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
+      if (!empty($tab['content'][$tab['type']]['options']['display_title']) && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
         $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
       }
       $build['pages'][$index]['#block'] = render($render);

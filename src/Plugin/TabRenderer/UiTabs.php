@@ -53,7 +53,7 @@ class UiTabs extends TabRendererBase {
       $tab_num = $index + 1;
       $attributes = new Attribute(array('id' => 'qt-' . $qt_id . '-ui-tabs' . $tab_num));
 
-      if ($tab['content'][$tab['type']]['options']['display_title'] && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
+      if (!empty($tab['content'][$tab['type']]['options']['display_title']) && !empty($tab['content'][$tab['type']]['options']['block_title'])) {
         $build['pages'][$index]['#title'] = $tab['content'][$tab['type']]['options']['block_title'];
       }
 
@@ -87,7 +87,6 @@ class UiTabs extends TabRendererBase {
     array_unshift($build, $tabs);
     
     // Attach js
-    $options = $instance->getOptions()['ui_tabs'];
     $default_tab = $instance->getDefaultTab();
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs.ui'),
