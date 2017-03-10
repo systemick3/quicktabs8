@@ -164,6 +164,8 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
     $type = \Drupal::service('plugin.manager.tab_renderer');
     $renderer = $type->createInstance($this->getRenderer());
 
+    \Drupal::moduleHandler()->alter('quicktabs_instance', $this);
+
     return $renderer->render($this);
   }
 
