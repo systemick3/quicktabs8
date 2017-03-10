@@ -73,8 +73,9 @@ class QuickTabs extends TabRendererBase {
     $is_ajax = $instance->getOptions()['quick_tabs']['ajax'];
     foreach ($instance->getConfigurationData() as $index => $tab) {
       // Build the pages //////////////////////////////////////
+      $default_tab = $instance->getDefaultTab() == 9999 ? 0 : $instance->getDefaultTab();
       if ($is_ajax) {
-        if ($instance->getDefaultTab() == $index) {
+        if ($default_tab == $index) {
           $object = $type->createInstance($tab['type']);
           $render = $object->render($tab);
         }
@@ -95,7 +96,7 @@ class QuickTabs extends TabRendererBase {
 
       $classes = array('quicktabs-tabpage');
 
-      if ($instance->getDefaultTab() != $index) {
+      if ($default_tab != $index) {
         $classes[] = 'quicktabs-hide';
       }
 
@@ -118,7 +119,7 @@ class QuickTabs extends TabRendererBase {
         'attributes' => array('id' => 'quicktabs-tab-' . $qt_id . '-' . $index),
       );
       $wrapper_attributes = [];
-      if ($instance->getDefaultTab() == $index) {
+      if ($default_tab == $index) {
         $wrapper_attributes['class'] = array('active');
       }
 
@@ -126,7 +127,7 @@ class QuickTabs extends TabRendererBase {
       if ($is_ajax) {
         $link_classes[] = 'use-ajax';
 
-        if ($instance->getDefaultTab() == $index) {
+        if ($default_tab == $index) {
           $link_classes[] = 'quicktabs-loaded';
         }
       }

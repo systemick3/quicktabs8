@@ -95,17 +95,20 @@ class AccordianTabs extends TabRendererBase {
     }
 
     $options = $instance->getOptions()['accordion_tabs'];
+    $active_tab = $instance->getDefaultTab() == 9999 ? 0 : $instance->getDefaultTab();
+    $active = $instance->getDefaultTab() == 9999 ? FALSE : (int)$instance->getDefaultTab();
+    $collapsible = $instance->getDefaultTab() == 9999 ? TRUE : (int)$options['jquery_ui']['collapsible'];
     $build['#attached'] = array(
       'library' => array('quicktabs/quicktabs.accordion'),
       'drupalSettings' => array(
         'quicktabs' => array(
           'qt_' . $qt_id => array(
             'tabs' => $tab_pages,
-            'active_tab' => $instance->getDefaultTab(),
+            'active_tab' => $active_tab,
             'options' => array(
-              'active' => (int)$instance->getDefaultTab(),
+              'active' => $active,
               'heightStyle' => $options['jquery_ui']['heightStyle'],
-              'collapsible' => (int)$options['jquery_ui']['collapsible'],
+              'collapsible' => $collapsible,
             ),
           ),
         ),

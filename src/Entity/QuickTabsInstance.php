@@ -138,7 +138,7 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
    * {@inheritdoc}
    */
   public function getDefaultTab() {
-    return (isset($this->default_tab) && $this->default_tab != QuickTabsInstance::QUICKTABS_DELTA_NONE) ? $this->default_tab : 0;
+    return $this->default_tab;
   }
 
   /**

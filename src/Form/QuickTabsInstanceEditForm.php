@@ -146,7 +146,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#type' => 'select',
       '#title' => t('Default tab'),
       '#options' => $tab_titles,
-      '#default_value' => !empty($this->entity->getDefaultTab()) ? $this->entity->getDefaultTab() : 0,
+      '#default_value' => $this->entity->getDefaultTab(),
       '#access' => !empty($tab_titles),
       '#weight' => -4,
     );
