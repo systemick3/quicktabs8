@@ -9,6 +9,7 @@ quicktabs:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - core/drupal.ajax
     - core/drupalSettings
 
 quicktabs.form:
