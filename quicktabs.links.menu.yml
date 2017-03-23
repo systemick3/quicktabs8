@@ -1,5 +1,6 @@
-quciktabs.admin:
+quicktabs.admin:
   title: 'Quick Tabs'
+  description: 'Configure and create QuickTabs instances'
   parent: system.admin_structure
-  description: 'Create blocks of tabbed content.'
   route_name: quicktabs.admin
+  weight: 100
