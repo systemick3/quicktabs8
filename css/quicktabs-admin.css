@@ -72,8 +72,8 @@ html.js #qt-tablist-table .qt-tab-options-form {
 }
 
 #quicktabs-form .add-tab {
-  background: transparent url(../images/add-tab.gif) no-repeat 0 -3px;
+  background: transparent url(../add-tab.gif) no-repeat 0 -3px;
 }
 #quicktabs-form .delete-tab {
-  background: transparent url(../images/delete-tab.gif) no-repeat 0 0;
+  background: transparent url(../delete-tab.gif) no-repeat 0 0;
 }
