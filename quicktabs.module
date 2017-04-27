@@ -7,6 +7,9 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 
+// Store quicktabs preprocess theme functions in a separate .inc file.
+\Drupal::moduleHandler()->loadInclude('quicktabs', 'inc', 'quicktabs.theme');
+
 /**
  * Implements hook_help().
  */
@@ -25,6 +28,9 @@ function quicktabs_theme($existing, $type, $theme, $path) {
     'quicktabs_block_content' => array(
       'variables' => array('title' => NULL, 'block' => NULL, 'classes' => NULL, 'id' => NULL),
       'template' => 'quicktabs-block-content',
+    ),
+    'quicktabs_view_quicktabs' => array(
+      'file' => 'quicktabs.theme.inc',
     ),
   );
 }
