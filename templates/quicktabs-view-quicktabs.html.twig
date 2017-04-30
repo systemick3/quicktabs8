@@ -1,25 +1,26 @@
 {#
 /**
 * @file
-* Template for quicktabs.
+* Template for quicktabs view.
 */
 #}
 
 {{ attach_library('quicktabs/quicktabs') }}
 
-<div class="quicktabs-wrapper" id="quicktabs-{{ quicktab_id }}">
-  <div class="item-list">
-    <ul class="quicktabs-tabs">
-      {% for row in rows %}
-        <li><a href="{{ row.tab_link }}">{{ row.tab_title }}</a></li>
-      {% endfor %}
-    </ul>
+{% set last_index = total_rows - 1 %}
+
+{% if page_prefix %}
+  <div class="quicktabs-main" id="quicktabs-container-{{ quicktab_id }}">
+{% endif %}
+{% if set_prefix %}
+  <div class="{{ set_prefix.classes }}" id="{{ set_prefix.id }}">
+{% endif %}
+{% for key, row in rows %}
+    {{ row }}
+{% endfor %}
+{% if set_prefix %}
   </div>
-  <div="quicktabs-main" id="quicktabs-container-{{ quicktab_id }}">
-  {% for key, row in rows %}
-    <div id="quicktabs-tabpage-{{ quicktab_id }}-{{ key }}" class="quicktabs-tabpage{{ (key > 0) ? ' quicktabs-hide' : '' }}">
-      {{ row.content }}
-    </div>
-  {% endfor %}
-  </ul>
-</div>
+{% endif %}
+{% if key == last_index %}
+  </div>
+{% endif %}
