@@ -117,9 +117,10 @@ class Quicktabs extends StylePluginBase {
       // Create the links for the tabs
       if (!empty($this->options['grouping'])) {
         // Grouping applied - use the array key
+        $title = strip_tags($index);
         $tab_titles[] = [
           '0' => Link::fromTextAndUrl(
-            new TranslatableMarkup($index),
+            new TranslatableMarkup($title),
             Url::fromRoute(
               '<current>',
               [],
