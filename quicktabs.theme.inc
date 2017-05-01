@@ -42,21 +42,24 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
     $variables['rows'][$id] = array();
     $variables['rows'][$id]['content'] = $row;
 
+    $attributes = [];
+    $quicktab_classes = [];
+    if ($options['default_row_class']) {
+      $quicktab_classes[] = 'views-row';
+    }
+    if (!empty($options['row_class'])) {
+      $quicktab_classes[] = $options['row_class'];
+    }
+
     // No grouping - each views row is a tab page
     if (empty($options['grouping'])) {
-      $quicktab_classes = ['quicktabs-tabpage'];
+      // Wrap each row in a tabpage div
+      $quicktab_classes[] = 'quicktabs-tabpage';
       if ($id > 0) {
         $quicktab_classes[] = 'quicktabs-hide';
       }
-      // Wrap each row in a tabpage div
-      $variables['rows'][$id]['content']['#theme_wrappers'] = [
-        'container' => [
-        '#attributes' => [
-          'class' => $quicktab_classes,
-            'id' => 'quicktabs-tabpage-' . $quicktab_id . '-' . $id,
-          ],
-        ],
-      ];
+
+      $attributes['id'] = 'quicktabs-tabpage-' . $quicktab_id . '-' . $id;
 
       // Create a tab object and add it to the tabs array used in the js settings
       $object = new stdClass();
@@ -64,6 +67,13 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       $object->title = $entity->get($tab_title_field)->value;
       $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs[] = $object;
     }
+
+    $attributes['class'] = $quicktab_classes;
+    $variables['rows'][$id]['content']['#theme_wrappers'] = [
+      'container' => [
+        '#attributes' => $attributes,
+      ],
+    ];
   }
 
   // Use the set mapping to decide when to apply the pages wrapper

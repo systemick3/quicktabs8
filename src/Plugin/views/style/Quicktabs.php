@@ -36,7 +36,7 @@ class Quicktabs extends StylePluginBase {
    *
    * @var bool
    */
-  //protected $usesRowClass = TRUE;
+  protected $usesRowClass = TRUE;
 
   /**
    * Should field labels be enabled by default.
