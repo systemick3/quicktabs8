@@ -114,9 +114,9 @@ class Quicktabs extends StylePluginBase {
     $link_classes = ['loaded'];
     $quicktab_id = str_replace('_', '-', $this->view->id());
     foreach ($sets as $index => $set) {
-      $set_index = $index;
+      // Create the links for the tabs
       if (!empty($this->options['grouping'])) {
-        $this->view->set_count = count($sets);
+        // Grouping applied - use the array key
         $tab_titles[] = [
           '0' => Link::fromTextAndUrl(
             new TranslatableMarkup($index),
@@ -133,6 +133,7 @@ class Quicktabs extends StylePluginBase {
         ];
       }
       else {
+        // no grouping - get the field value from the entity atttached to each row
         $tab_title_field = $this->options['tab_title_field'];
         foreach($set['rows'] as $row) {
           $entity = $row->_entity;
@@ -151,7 +152,7 @@ class Quicktabs extends StylePluginBase {
             )->toRenderable(),
           ];
         }
-      }
+      } // End of create tab links code
 
       $level = isset($set['level']) ? $set['level'] : 0;
 
@@ -180,6 +181,8 @@ class Quicktabs extends StylePluginBase {
       $single_output['#grouping_level'] = $level;
       $single_output['#title'] = $set['group'];
 
+      // Create a mapping of which rows belong in which set
+      // This can then be used in the theme function to wrap each tab page
       if (!empty($this->options['grouping'])) {
         $set_mapping = [];
         foreach($sets as $set_index => $set) {
@@ -194,6 +197,7 @@ class Quicktabs extends StylePluginBase {
     }
     unset($this->view->row_index);
 
+    // Create the tabs for rendering
     $tabs = [
       '#theme' => 'item_list',
       '#items' => $tab_titles,
