@@ -29,20 +29,20 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
     return "";
   }
 
+  // TODO: do we still need these?
+  $variables['default_row_class'] = !empty($options['default_row_class']);
+
+  $variables['total_rows'] = $view->total_rows;
   $quicktab_id = str_replace('_', '-', $view->id());
   $variables['quicktab_id'] = $quicktab_id;
   $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id] = new stdClass();
   $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs = [];
-
-  // TODO: do we still need these?
-  $variables['default_row_class'] = !empty($options['default_row_class']);
-  $variables['total_rows'] = $view->total_rows;
-
   foreach ($rows as $id => $row) {
     $entity = $row['#row']->_entity;
     $variables['rows'][$id] = array();
     $variables['rows'][$id]['content'] = $row;
 
+    // No grouping - each views row is a tab page
     if (empty($options['grouping'])) {
       $quicktab_classes = ['quicktabs-tabpage'];
       if ($id > 0) {
@@ -56,6 +56,8 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
           ],
         ],
       ];
+
+      // Create a tab object and add it to the tabs array used in the js settings
       $object = new stdClass();
       $object->tab_page = $id;
       $object->title = $entity->get($tab_title_field)->value;
@@ -64,21 +66,19 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   }
 
   $set_mapping = $style->getSetMapping();
-  $set_is_mapped = FALSE;
-  $page_prefix = FALSE;
+  $pages_prefix = FALSE;
   if (empty($options['grouping'])) {
-    $page_prefix = TRUE;
+    $pages_prefix = TRUE;
   }
   else if (is_array($set_mapping)) {
     $current_set = 0;
     foreach ($set_mapping as $index => $item) {
       if (empty(array_diff($set_mapping[$index], array_keys($rows)))) {
-        $set_is_mapped = TRUE;
         if ($current_set == 0) {
-          $page_prefix = TRUE;
+          $pages_prefix = TRUE;
         }
         else {
-          $page_prefix = FALSE;
+          $pages_prefix = FALSE;
         }
         $classes = 'quicktabs-tabpage';
 
@@ -97,5 +97,5 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
     }
   }
 
-  $variables['page_prefix'] = $page_prefix;
+  $variables['pages_prefix'] = $pages_prefix;
 }
