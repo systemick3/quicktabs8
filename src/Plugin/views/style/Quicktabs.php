@@ -107,22 +107,6 @@ class Quicktabs extends StylePluginBase {
   /**
    * {@inheritdoc}
    */
-  public function render() {
-    if ($this->usesRowPlugin() && empty($this->view->rowPlugin)) {
-      debug('Drupal\views\Plugin\views\style\StylePluginBase: Missing row plugin');
-      return;
-    }
-
-    // Group the rows according to the grouping instructions, if specified.
-    $sets = $this->renderGrouping(
-      $this->view->result,
-      $this->options['grouping'],
-      TRUE
-    );
-
-    return $this->renderGroupingSets($sets);
-  }
-
   public function renderGroupingSets($sets, $level = 0) {
     $output = array();
     $theme_functions = $this->view->buildThemeFunctions($this->groupingTheme);
@@ -137,12 +121,8 @@ class Quicktabs extends StylePluginBase {
           '0' => Link::fromTextAndUrl(
             new TranslatableMarkup($index),
             Url::fromRoute(
-              'quicktabs.ajax_content',
-              [
-                'js' => 'nojs',
-                'instance' => $quicktab_id,
-                'tab' => $index
-              ],
+              '<current>',
+              [],
               [
                 'attributes' => array(
                   'class' => $link_classes,
@@ -160,10 +140,8 @@ class Quicktabs extends StylePluginBase {
             '0' => Link::fromTextAndUrl(
               new TranslatableMarkup($entity->get($tab_title_field)->value),
               Url::fromRoute(
-                'entity.node.canonical',
-                [
-                  'node' => $entity->id(),
-                ],
+                '<current>',
+                [],
                 [
                   'attributes' => [
                     'class' => $link_classes,
