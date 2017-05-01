@@ -48,6 +48,7 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       if ($id > 0) {
         $quicktab_classes[] = 'quicktabs-hide';
       }
+      // Wrap each row in a tabpage div
       $variables['rows'][$id]['content']['#theme_wrappers'] = [
         'container' => [
         '#attributes' => [
@@ -65,15 +66,18 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
     }
   }
 
+  // Use the set mapping to decide when to apply the pages wrapper
   $set_mapping = $style->getSetMapping();
   $pages_prefix = FALSE;
   if (empty($options['grouping'])) {
+    // No grouping - this theme function is only applied once so always add the wrapper
     $pages_prefix = TRUE;
   }
   else if (is_array($set_mapping)) {
     $current_set = 0;
     foreach ($set_mapping as $index => $item) {
       if (empty(array_diff($set_mapping[$index], array_keys($rows)))) {
+        // Grouping - add the wrapper before the first set
         if ($current_set == 0) {
           $pages_prefix = TRUE;
         }
@@ -82,6 +86,7 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
         }
         $classes = 'quicktabs-tabpage';
 
+        // Hide all but the first set
         if ($current_set > 0) {
           $classes .= ' quicktabs-hide';
         }
