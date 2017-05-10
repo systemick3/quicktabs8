@@ -92,16 +92,11 @@ class Quicktabs extends StylePluginBase {
       );
       return;
     }
-    
-    $form['tab_title_field'] = array(
-      '#type' => 'select',
-      '#title' => $this->t('Title field'),
-      '#options' => $options,
-      '#required' => TRUE,
-      '#default_value' => $this->options['tab_title_field'],
-      '#description' => t('Select the field that will be used as the tab title.'),
-      '#weight' => -3,
-    );
+
+    foreach ($form['grouping'] as $index => &$field) {
+      $current_value = $field['field']['#description']->getUntranslatedString();
+      $field['field']['#description'] = t('@current_value This field will be used for the title of each quick tab.', array('@current_value' => $current_value));
+    }
   }
 
   /**
