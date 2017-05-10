@@ -24,10 +24,6 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   $options = $style->options;
 
   $tab_title_field = $options['tab_title_field'];
-  if(empty($tab_title_field)) {
-    drupal_set_message(t("No field configured for the tab title."), "error");
-    return "";
-  }
 
   // TODO: do we still need these?
   $variables['default_row_class'] = !empty($options['default_row_class']);
@@ -51,23 +47,6 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       $quicktab_classes[] = $options['row_class'];
     }
 
-    // No grouping - each views row is a tab page
-    if (empty($options['grouping'])) {
-      // Wrap each row in a tabpage div
-      $quicktab_classes[] = 'quicktabs-tabpage';
-      if ($id > 0) {
-        $quicktab_classes[] = 'quicktabs-hide';
-      }
-
-      $attributes['id'] = 'quicktabs-tabpage-' . $quicktab_id . '-' . $id;
-
-      // Create a tab object and add it to the tabs array used in the js settings
-      $object = new stdClass();
-      $object->tab_page = $id;
-      $object->title = $entity->get($tab_title_field)->value;
-      $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs[] = $object;
-    }
-
     $attributes['class'] = $quicktab_classes;
     $variables['rows'][$id]['content']['#theme_wrappers'] = [
       'container' => [
@@ -79,11 +58,7 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   // Use the set mapping to decide when to apply the pages wrapper
   $set_mapping = $style->getSetMapping();
   $pages_prefix = FALSE;
-  if (empty($options['grouping'])) {
-    // No grouping - this theme function is only applied once so always add the wrapper
-    $pages_prefix = TRUE;
-  }
-  else if (is_array($set_mapping)) {
+  if (is_array($set_mapping)) {
     $current_set = 0;
     foreach ($set_mapping as $index => $item) {
       if (empty(array_diff($set_mapping[$index], array_keys($rows)))) {

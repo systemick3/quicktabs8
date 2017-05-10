@@ -81,19 +81,10 @@ class Quicktabs extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $options = array('' => $this->t('- None -'));
-    $field_labels = $this->displayHandler->getFieldLabels(TRUE);
-    $options += $field_labels;
-
-    $handlers = $this->displayHandler->getHandlers('field');
-    if (empty($handlers)) {
-      $form['error_markup'] = array(
-        '#markup' => '<div class="messages messages--error">' . $this->t('The Quicktabs display style requires that a field be configured to be used as the tab title.') . '</div>',
-      );
-      return;
-    }
-
     foreach ($form['grouping'] as $index => &$field) {
+      if ($index == 0) {
+        $field['field']['#required'] = 1;
+      }
       $current_value = $field['field']['#description']->getUntranslatedString();
       $field['field']['#description'] = t('@current_value This field will be used for the title of each quick tab.', array('@current_value' => $current_value));
     }
@@ -128,27 +119,6 @@ class Quicktabs extends StylePluginBase {
           )->toRenderable(),
         ];
       }
-      else {
-        // no grouping - get the field value from the entity atttached to each row
-        $tab_title_field = $this->options['tab_title_field'];
-        foreach($set['rows'] as $row) {
-          $entity = $row->_entity;
-          $tab_titles[] = [
-            '0' => Link::fromTextAndUrl(
-              new TranslatableMarkup($entity->get($tab_title_field)->value),
-              Url::fromRoute(
-                '<current>',
-                [],
-                [
-                  'attributes' => [
-                    'class' => $link_classes,
-                  ],
-                ]
-              )
-            )->toRenderable(),
-          ];
-        }
-      } // End of create tab links code
 
       $level = isset($set['level']) ? $set['level'] : 0;
 
