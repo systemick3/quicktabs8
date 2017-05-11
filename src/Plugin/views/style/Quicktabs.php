@@ -46,12 +46,19 @@ class Quicktabs extends StylePluginBase {
   protected $defaultFieldLabels = TRUE;
 
   /**
-   * Should field labels be enabled by default.
+   * Mapping tabs to pages.
    *
    * @var bool
    */
   protected $setMapping;
-  
+
+  /**
+   * The render array for the tabs.
+   *
+   * @var bool
+   */
+  protected $tabs = [];
+
   /**
    * Set default options
    */
@@ -59,6 +66,20 @@ class Quicktabs extends StylePluginBase {
     $options = parent::defineOptions();
     $options['path'] = array('default' => 'quicktabs');
     return $options;
+  }
+
+  /**
+   * Set the tabs.
+   */
+  public function setTabs(array $tabs) {
+    $this->tabs = $tabs;
+  }
+
+  /**
+   * Get the tabs.
+   */
+  public function getTabs() {
+    return $this->tabs;
   }
 
   /**
@@ -85,6 +106,11 @@ class Quicktabs extends StylePluginBase {
       if ($index == 0) {
         $field['field']['#required'] = 1;
       }
+      // Only allow 2 levels of grouping
+      else if ($index > 1) {
+        unset($form['grouping'][$index]);
+      }
+
       $current_value = $field['field']['#description']->getUntranslatedString();
       $field['field']['#description'] = t('@current_value This field will be used for the title of each quick tab.', array('@current_value' => $current_value));
     }
@@ -99,26 +125,25 @@ class Quicktabs extends StylePluginBase {
     $tab_titles = [];
     $link_classes = ['loaded'];
     $quicktab_id = str_replace('_', '-', $this->view->id());
+
+    $indexes = array_keys($sets);
+    $first = reset($indexes);
     foreach ($sets as $index => $set) {
-      // Create the links for the tabs
-      if (!empty($this->options['grouping'])) {
-        // Grouping applied - use the array key
-        $title = strip_tags($index);
-        $tab_titles[] = [
-          '0' => Link::fromTextAndUrl(
-            new TranslatableMarkup($title),
-            Url::fromRoute(
-              '<current>',
-              [],
-              [
-                'attributes' => array(
-                  'class' => $link_classes,
-                ),
-              ]
-            )
-          )->toRenderable(),
-        ];
-      }
+      $title = strip_tags($index);
+      $tab_titles[] = [
+        '0' => Link::fromTextAndUrl(
+          new TranslatableMarkup($title),
+          Url::fromRoute(
+            '<current>',
+            [],
+            [
+              'attributes' => array(
+                'class' => $link_classes,
+              ),
+            ]
+          )
+        )->toRenderable(),
+      ];
 
       $level = isset($set['level']) ? $set['level'] : 0;
 
@@ -156,12 +181,13 @@ class Quicktabs extends StylePluginBase {
             $set_mapping[$set_index][] = $row_index;
           }
         }
-        $this->setSetMapping($set_mapping);
       }
 
       $output[] = $single_output;
     }
+
     unset($this->view->row_index);
+    $this->setSetMapping($set_mapping);
 
     // Create the tabs for rendering
     $tabs = [
@@ -172,8 +198,7 @@ class Quicktabs extends StylePluginBase {
       ],
     ];
 
-    // Add tabs to the build
-    array_unshift($output, $tabs);
+    $this->setTabs($tabs);
 
     // Add quicktabs wrapper to all the output
     $output['#theme_wrappers'] = [
