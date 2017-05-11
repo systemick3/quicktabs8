@@ -23,12 +23,10 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   $style = $view->style_plugin;
   $options = $style->options;
 
-  $tab_title_field = $options['tab_title_field'];
-
   // TODO: do we still need these?
   $variables['default_row_class'] = !empty($options['default_row_class']);
-
   $variables['total_rows'] = $view->total_rows;
+
   $quicktab_id = str_replace('_', '-', $view->id());
   $variables['quicktab_id'] = $quicktab_id;
   $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id] = new stdClass();
@@ -55,29 +53,14 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
     ];
   }
 
-  // Use the set mapping to decide when to apply the pages wrapper
   $set_mapping = $style->getSetMapping();
-  $pages_prefix = FALSE;
-  if (is_array($set_mapping)) {
+  if (!empty($style->getTabs())) {
     $current_set = 0;
-    foreach ($set_mapping as $index => $item) {
-      if (empty(array_diff($set_mapping[$index], array_keys($rows)))) {
-        // Grouping - add the wrapper before the first set
-        if ($current_set == 0) {
-          $pages_prefix = TRUE;
-        }
-        else {
-          $pages_prefix = FALSE;
-        }
-        $classes = 'quicktabs-tabpage';
-
-        // Hide all but the first set
-        if ($current_set > 0) {
-          $classes .= ' quicktabs-hide';
-        }
-        $variables['set_prefix']['classes'] = $classes;
-        $variables['set_prefix']['id'] = 'quicktabs-tabpage-' . $quicktab_id . '-' . $current_set;
-      }
+    $rows_with_page_starts = [];
+    $rows_with_page_endings = [];
+    foreach ($set_mapping as $index => $row_numbers) {
+      $rows_with_page_starts[] = reset($row_numbers);
+      $rows_with_page_endings[] = array_pop($row_numbers);
 
       $object = new stdClass();
       $object->tab_page = $current_set;
@@ -85,6 +68,14 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs[] = $object;
       $current_set++;
     }
+
+    unset($variables['title']);
+
+    $rows_with_tabs = [0];
+    $variables['tabs'] = $style->getTabs();
+    $variables['rows_with_tabs'] = $rows_with_tabs;
+    $variables['rows_with_page_starts'] = $rows_with_page_starts;
+    $variables['rows_with_page_endings'] = $rows_with_page_endings;
   }
 
   $variables['pages_prefix'] = $pages_prefix;
