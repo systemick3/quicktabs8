@@ -106,13 +106,13 @@ class Quicktabs extends StylePluginBase {
       if ($index == 0) {
         $field['field']['#required'] = 1;
       }
-      // Only allow 2 levels of grouping
-      else if ($index > 1) {
+      // Only allow 1 level of grouping
+      else if ($index > 0) {
         unset($form['grouping'][$index]);
       }
 
       $current_value = $field['field']['#description']->getUntranslatedString();
-      $field['field']['#description'] = t('@current_value This field will be used for the title of each quick tab.', array('@current_value' => $current_value));
+      $field['field']['#description'] = t('You must specify a field by which to group the records. This field will be used for the title of each tab.', array('@current_value' => $current_value));
     }
   }
 
