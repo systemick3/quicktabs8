@@ -126,8 +126,6 @@ class Quicktabs extends StylePluginBase {
     $link_classes = ['loaded'];
     $quicktab_id = str_replace('_', '-', $this->view->id());
 
-    $indexes = array_keys($sets);
-    $first = reset($indexes);
     foreach ($sets as $index => $set) {
       $title = strip_tags($index);
       $tab_titles[] = [
@@ -146,7 +144,6 @@ class Quicktabs extends StylePluginBase {
       ];
 
       $level = isset($set['level']) ? $set['level'] : 0;
-
       $row = reset($set['rows']);
       // Render as a grouping set.
       if (is_array($row) && isset($row['group'])) {
@@ -186,8 +183,8 @@ class Quicktabs extends StylePluginBase {
       $output[] = $single_output;
     }
 
-    unset($this->view->row_index);
     $this->setSetMapping($set_mapping);
+    unset($this->view->row_index);
 
     // Create the tabs for rendering
     $tabs = [

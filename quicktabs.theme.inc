@@ -23,14 +23,10 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   $style = $view->style_plugin;
   $options = $style->options;
 
-  // TODO: do we still need these?
   $variables['default_row_class'] = !empty($options['default_row_class']);
   $variables['total_rows'] = $view->total_rows;
-
   $quicktab_id = str_replace('_', '-', $view->id());
   $variables['quicktab_id'] = $quicktab_id;
-  $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id] = new stdClass();
-  $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs = [];
   foreach ($rows as $id => $row) {
     $entity = $row['#row']->_entity;
     $variables['rows'][$id] = array();
@@ -54,6 +50,8 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
   }
 
   $set_mapping = $style->getSetMapping();
+  $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id] = new stdClass();
+  $variables['#attached']['drupalSettings']['quicktabs']['qt_' . $quicktab_id]->tabs = [];
   if (!empty($style->getTabs())) {
     $current_set = 0;
     $rows_with_page_starts = [];
@@ -62,6 +60,7 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       $rows_with_page_starts[] = reset($row_numbers);
       $rows_with_page_endings[] = array_pop($row_numbers);
 
+      // Add each tab to the js settings
       $object = new stdClass();
       $object->tab_page = $current_set;
       $object->title = $index;
@@ -69,8 +68,11 @@ function template_preprocess_quicktabs_view_quicktabs(&$variables) {
       $current_set++;
     }
 
+    // The tab is effectively the title
     unset($variables['title']);
 
+    // Use these in the template to determine
+    // where to insert quicktabs markup
     $rows_with_tabs = [0];
     $variables['tabs'] = $style->getTabs();
     $variables['rows_with_tabs'] = $rows_with_tabs;
