@@ -105,6 +105,9 @@ class Quicktabs extends StylePluginBase {
     foreach ($form['grouping'] as $index => &$field) {
       if ($index == 0) {
         $field['field']['#required'] = 1;
+        $field['rendered']['#default_value'] = TRUE;
+        $field['rendered']['#access'] = FALSE;
+        $field['rendered_strip']['#access'] = FALSE;
       }
       // Only allow 1 level of grouping
       else if ($index > 0) {
