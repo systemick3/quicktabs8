@@ -69,7 +69,7 @@ class BlockContent extends TabTypeBase {
       $entity_manager = \Drupal::service('entity.manager');
       $block = $entity_manager->loadEntityByUuid($parts[0], $parts[1]);
       $block_content = \Drupal\block_content\Entity\BlockContent::load($block->id());
-      $render = \Drupal::entityManager()->getViewBuilder('block_content')->view($block_content);
+      $render = \Drupal::entityTypeManager()->getViewBuilder('block_content')->view($block_content);
     }
     else {
       $block_manager = \Drupal::service('plugin.manager.block');

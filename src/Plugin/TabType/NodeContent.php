@@ -33,7 +33,8 @@ class NodeContent extends TabTypeBase {
       '#size' => 20,
       '#default_value' => isset($tab['content'][$plugin_id]['options']['nid']) ? $tab['content'][$plugin_id]['options']['nid'] : '',
     );
-    $view_modes = \Drupal::entityManager()->getViewModes('node');
+    $display_repository = \Drupal::service('entity_display.repository');
+    $view_modes = $display_repository->getViewModes('node');
     $options = [];
     foreach ($view_modes as $view_mode_name => $view_mode) {
       $options[$view_mode_name] = $view_mode['label'];
