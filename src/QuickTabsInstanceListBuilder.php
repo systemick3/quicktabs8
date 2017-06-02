@@ -40,17 +40,17 @@ class QuickTabsInstanceListBuilder extends EntityListBuilder {
       $operations['edit'] = array(
         'title' => t('Edit Quick Tab'),
         'weight' => 10,
-        'url' => $entity->urlInfo('edit'),
+        'url' => $entity->toUrl('edit'),
       );
       $operations['delete'] = array(
         'title' => t('Delete Quick Tab'),
         'weight' => 20,
-        'url' => $entity->urlInfo('delete'),
+        'url' => $entity->toUrl('delete'),
       );
       $operations['duplicate'] = array(
         'title' => t('Duplicate Quick Tab'),
         'weight' => 40,
-        'url' => $entity->urlInfo('duplicate'),
+        'url' => $entity->toUrl('duplicate'),
       );
     }
     return $operations;

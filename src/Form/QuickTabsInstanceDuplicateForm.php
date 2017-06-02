@@ -76,7 +76,7 @@ class QuickTabsInstanceDuplicateForm extends EntityForm {
     $this->entity->save();
 
     // Redirect the user to the view admin form.
-    $form_state->setRedirectUrl($this->entity->urlInfo('edit'));
+    $form_state->setRedirectUrl($this->entity->toUrl('edit'));
   }
 
 }
