@@ -128,9 +128,16 @@ class Quicktabs extends StylePluginBase {
     $tab_titles = [];
     $link_classes = ['loaded'];
     $quicktab_id = str_replace('_', '-', $this->view->id());
+    $set_count = 0;
 
     foreach ($sets as $index => $set) {
       $title = strip_tags($index);
+      $wrapper_attributes = [];
+
+      if ($set_count === 0) {
+        $wrapper_attributes['class'] = array('active');
+      }
+
       $tab_titles[] = [
         '0' => Link::fromTextAndUrl(
           new TranslatableMarkup($title),
@@ -144,6 +151,7 @@ class Quicktabs extends StylePluginBase {
             ]
           )
         )->toRenderable(),
+        '#wrapper_attributes' => $wrapper_attributes,
       ];
 
       $level = isset($set['level']) ? $set['level'] : 0;
@@ -184,6 +192,7 @@ class Quicktabs extends StylePluginBase {
       }
 
       $output[] = $single_output;
+      $set_count++;
     }
 
     $this->setSetMapping($set_mapping);
